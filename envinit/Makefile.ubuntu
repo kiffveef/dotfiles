@@ -1,0 +1,57 @@
+apt-update:
+	sudo apt-get update
+
+base:: apt-update
+	sudo apt-get install -y \
+		curl \
+		file \
+		gnupg \
+		build-essential \
+		libbz2-dev \
+		libcurl4-openssl-dev \
+		libffi-dev \
+		liblzma-dev \
+		libreadline-dev \
+		libsqlite3-dev \
+		libssl-dev \
+		libxslt1-dev \
+		libyaml-dev \
+		libxml2-dev \
+		sqlite3 \
+		tk-dev \
+		unzip \
+		wget \
+		zip \
+		zlib1g-dev
+
+git-ppa::
+	sudo add-apt-repository ppa:git-core/ppa
+git-ppa:: apt-update
+	sudo apt-get install -y git
+
+fish-ppa::
+	sudo add-apt-repository ppa:fish-shell/release-3
+fish-ppa:: apt-update
+	sudo apt-get install -y fish
+	chsh -s /usr/bin/fish
+	su - ${USER}
+
+docker::
+	curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
+	sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu focal stable"
+docker-install:: apt-update
+	apt-cache policy docker-ce
+	sudo apt-get install -y \
+		docker-ce \
+		docker-compose-plugin
+docker:: docker-install
+	sudo usermod -aG docker ${USER}
+	# su - ${USER}
+	exec -l ${SHELL}
+
+ruby:: apt-update
+	sudo apt-get install -y ruby-full
+
+brew:: ruby
+	chmod +x envinit/brew.sh
+	./envinit/brew.sh
