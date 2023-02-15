@@ -41,7 +41,7 @@ local options = {
   wrapscan = true,
   incsearch = true,
 -- クリップボード
-  clipboard = "unnamedplus",
+  clipboard = "unnamed",
 -- 矩形選択
   virtualedit = "block",
 -- 補完

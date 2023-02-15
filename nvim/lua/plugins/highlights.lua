@@ -9,6 +9,7 @@ return {
       keywordStyle = { italic = false },
       statementStyle = { italic = false },
       typeStyle = { bold = true, italic = false },
+      variablebuiltinStyle = { italic = false },
     },
     config = function(_, opts)
       require("kanagawa").setup(opts)

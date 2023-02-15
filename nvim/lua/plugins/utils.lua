@@ -35,7 +35,7 @@ return {
     opts = {
       -- char = "▏",
       char = "│",
-      filetype_exclude = { "help", "Trouble", "lazy" },
+      filetype_exclude = { "help", "Trouble", "lazy", "NeogitStatus" },
       show_trailing_blankline_indent = false,
       show_current_context = false,
     },
@@ -64,10 +64,11 @@ return {
     "glidenote/memolist.vim",
     dependencies = { "previm/previm" },
     config = function()
-      vim.g.memolist_path = vim.g.local_memodir
+      local rc = require("rc.local")
+      vim.g.memolist_path = rc.memodir
       vim.g.memolist_memo_suffix = "md"
       vim.g.memolist_template_dir_path = vim.env.XDG_CONFIG_HOME .. "/templates/memo"
-      vim.g.previm_open_cmd = vim.g.local_chrome
+      vim.g.previm_open_cmd = rc.browser_exe
       vim.g.previm_wsl_mode = 1
       vim.api.nvim_set_keymap("n",  "<leader>mn", ":MemoNew<cr>", { noremap = true, silent = true })
       -- vim.api.nvim_set_keymap("n",  "<leader>ml", ":MemoList<cr>", { noremap = true, silent = true })

@@ -17,9 +17,12 @@ return {
     },
     "cljoly/telescope-repo.nvim",
   },
-  config = function()
-    local common_theme = { theme = "ivy" }
-    local _, telescope = pcall(require, "telescope")
+  opts = {
+    theme = { theme = "ivy" },
+    height = { height = 0.4 },
+  },
+  config = function(_, opts)
+    local telescope = require("telescope")
     local fw_actions = telescope.extensions.file_browser.actions
     telescope.setup({
       defaults = {
@@ -32,8 +35,9 @@ return {
           ".git/refs",
           "node_modules",
           "log",
+          "_files"
         },
-        layout_config = { height = 0.4 },
+        layout_config = opts.height,
         mappings = {
         -- cf. https://github.com/nvim-telescope/telescope.nvim/blob/master/lua/telescope/mappings.lua
           i = {
@@ -53,16 +57,16 @@ return {
         },
       },
       pickers = {
-        find_files = common_theme,
-        live_grep = common_theme,
-        buffers = common_theme,
-        registers = common_theme,
+        find_files = opts.theme,
+        live_grep  = opts.theme,
+        buffers    = opts.theme,
+        registers  = opts.theme,
       },
       extensions = {
         frecency = {
           db_root = vim.env.XDG_CONFIG_HOME .. "/nvim",
-          ignore_patterns = { "*/tmp/*", "*/log/*" },
-          limit = 2000,
+          ignore_patterns = { "*/tmp/*", "*/log/*", ".linuxbrew/*" },
+          limit = 200,
         },
         file_browser = {
           theme = "ivy",
@@ -83,7 +87,7 @@ return {
         repo = {
           search_dirs = {
             vim.fn.stdpath("data") .. "/site/pack",
-            vim.env.HOME .. "/workspace/github.com",
+            vim.env.HOME .. "/workspace",
           },
         },
       },
@@ -93,7 +97,7 @@ return {
     telescope.load_extension("fzf")
     telescope.load_extension("repo")
   end,
-  keys = function()
+  keys = function(opts)
     local actions = require("telescope.actions")
     local builtin = require("telescope.builtin")
     local function telescope_buffer_dir()
@@ -132,7 +136,7 @@ return {
             grouped = true,
             previewer = false,
             initial_mode = "insert",
-            layout_config = { height = 0.4 },
+            layout_config = opts.height,
           })
         end
       },
@@ -140,19 +144,26 @@ return {
         -- Open mattn/memo dir
         mode = { "n" }, "<leader>ml", function()
           require("telescope").extensions.file_browser.file_browser({
-            path = vim.g.local_memodir,
+            path = require("rc.local").memodir,
             cwd = telescope_buffer_dir(),
             respect_gitignore = false,
             hidden = true,
             grouped = true,
             previewer = false,
             initial_mode = "insert",
-            layout_config = { height = 0.4 },
+            layout_config = opts.height,
           })
         end
       },
-      { mode = { "n" }, "<Space>fh", function() require("telescope").extensions.frecency.frecency() end },
-      { mode = { "n" }, "<leader>fr", function() require("telescope").extensions.repo.list() end },
+      {
+        mode = { "n" }, "<Space>fh", function()
+          require("telescope").extensions.frecency.frecency(require("telescope.themes").get_ivy(opts.height))
+        end
+      },
+      { mode = { "n" }, "<leader>fr", function()
+          require("telescope").extensions.repo.list(require("telescope.themes").get_ivy(opts.height))
+        end
+      },
     }
   end,
 }
