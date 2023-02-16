@@ -23,6 +23,15 @@ return {
     "machakann/vim-sandwich",
   },
   {
+    "RRethy/vim-illuminate",
+    event = { "BufReadPost", },
+    config = function()
+      require("illuminate").configure({
+        delay = 100,
+      })
+    end,
+  },
+  {
     "junegunn/vim-easy-align",
     config = function()
       vim.keymap.set("x", "ga", "<Plug>(EasyAlign)")
