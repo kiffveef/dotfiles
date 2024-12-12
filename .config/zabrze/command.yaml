@@ -1,0 +1,52 @@
+abbrevs:
+  - name: reload shell
+    abbr: resh
+    snippet: exec $SHELL -l
+
+  - name: mkdir -p
+    abbr: md
+    snippet: mkdir -p
+
+  - name: bat
+    abbr: cat
+    snippet: bat
+    if: (( ${+commands[bat]} ))
+
+  # apt
+  - name: sudo apt
+    abbr: apt
+    snippet: sudo apt
+
+  - name: apt update
+    abbr: upd
+    snippet: update
+    global: true
+    context: ^sudo apt\s
+
+  - name: sudo apt upgrade
+    abbr: upg
+    snippet: upgrade -y
+    global: true
+    context: ^sudo apt\s
+
+  - name: sudo apt install
+    abbr: ins
+    snippet: install -y
+    global: true
+    context: ^sudo apt\s
+
+  - name: apt package search
+    abbr: aptsearch
+    snippet: sudo apt-cache search
+
+  # editor
+  - name: nvim
+    abbr: vn
+    snippet: nvim
+    if: (( ${+commands[nvim]} ))
+
+  - name: nvim
+    abbr: vim
+    snippet: nvim
+    if: (( ${+commands[nvim]} ))
+

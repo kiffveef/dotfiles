@@ -1,0 +1,184 @@
+abbrevs:
+  - name: git
+    abbr: gti
+    snippet: git
+
+  - name: git add
+    abbr: ad
+    snippet: add -vA
+    global: true
+    context: ^git\s
+
+  - name: git branch --all
+    abbr: branches
+    snippet: branch -a
+    global: true
+    context: ^git\s
+
+  - name: git branch --list
+    abbr: b
+    snippet: branch -l
+    global: true
+    context: ^git\s
+
+  - name: git checkout
+    abbr: co
+    snippet: checkout
+    global: true
+    context: ^git\s
+
+  - name: git checkout -b
+    abbr: b
+    snippet: -b
+    global: true
+    context: ^git checkout\s
+  
+  - name: git commit
+    abbr: cm
+    snippet: commit
+    global: true
+    context: ^git\s
+
+  - name: git commit -m
+    abbr: m
+    global: true
+    snippet: -m '{}'
+    context: ^git commit\s
+
+  - name: git commit -m WIP
+    abbr: wip
+    global: true
+    snippet: -m 'WIP {}'
+    context: ^git commit\s
+
+  - name: git commit --allow-empty -m
+    abbr: emp
+    global: true
+    snippet: --allow-empty -m '{}'
+    context: ^git commit\s
+
+  - name: git status --short --branch
+    abbr: st
+    snippet: status -sb
+    global: true
+    context: ^git\s
+
+  - name: git pull
+    abbr: pl
+    snippet: pull
+    global: true
+    context: ^git\s
+
+  - name: git pull --rebase
+    abbr: plrb
+    snippet: pull --rebase origin {}
+    global: true
+    context: ^git\s
+
+  # https://zenn.dev/imaizume/articles/61d37580ef6cdb
+  - name: git pull origin <current branch>
+    abbr: ploh
+    snippet: "pull origin $(git rev-parse --abbrev-ref HEAD)"
+    global: true
+    context: ^git\s
+
+  - name: git push
+    abbr: p
+    snippet: push
+    global: true
+    context: ^git\s
+
+  - name: git push --set-upstream
+    abbr: u
+    snippet: -u
+    global: true
+    context: ^git push\s
+
+  - name: git push origin HEAD
+    abbr: oh
+    snippet: origin HEAD
+    global: true
+    context: ^git push\s
+
+  - name: git push --force-with-lease
+    abbr: f
+    snippet: --force-with-lease
+    global: true
+    context: ^git push\s
+
+  - name: git rebase
+    abbr: rb
+    snippet: rebase
+    global: true
+    context: ^git\s
+
+  - name: git rebase -i
+    abbr: rbi
+    snippet: rebase -i HEAD~{}
+    global: true
+    context: ^git\s
+
+  - name: git reset HEAD
+    abbr: unstage
+    snippet: reset HEAD
+    global: true
+    context: ^git\s
+
+  - name: git stash 
+    abbr: ss
+    snippet: stash
+    global: true
+    context: ^git\s
+
+  - name: git stash apply
+    abbr: app
+    snippet: apply stash@{{}}
+    global: true
+    context: ^git stash\s
+
+  - name: git stash clear
+    abbr: c
+    snippet: clear
+    global: true
+    context: ^git stash\s
+
+  - name: git stash drop
+    abbr: d
+    snippet: drop stash@{{}}
+    global: true
+    context: ^git stash\s
+
+  - name: git stash list
+    abbr: l
+    snippet: list
+    global: true
+    context: ^git stash\s
+
+  - name: git stash pop
+    abbr: p
+    snippet: pop stash@{{}}
+    global: true
+    context: ^git stash\s
+
+  - name: git stash save --include-untracked
+    abbr: u
+    snippet: save -u '{}'
+    global: true
+    context: ^git stash\s
+
+  - name: git stash show -p
+    abbr: sw
+    snippet: show -p stash@{{}}
+    global: true
+    context: ^git stash\s
+
+  - name: git tag
+    abbr: t
+    snippet: tag
+    context: ^git\s
+
+  - name: git tag --list
+    abbr: l
+    snippet: --list
+    context: ^git tag\s
+

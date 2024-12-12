@@ -1,0 +1,31 @@
+abbrevs:
+  # lsd
+  - name: ls
+    abbr: ls
+    snippet: lsd --group-directories-first
+    if: (( ${+commands[lsd]} ))
+
+  - name: ls -l
+    abbr: ll
+    snippet: lsd -lF --group-directories-first
+    if: (( ${+commands[lsd]} ))
+
+  - name: ls -la
+    abbr: la
+    snippet: lsd -laF --group-directories-first
+    if: (( ${+commands[lsd]} ))
+
+  - name: ls -l --tree
+    abbr: lt
+    snippet: lsd -lF --group-directories-first --tree
+    if: (( ${+commands[lsd]} ))
+
+  # cd
+  - name: cd ..
+    abbr: ..
+    snippet: cd ../
+  
+  - name: cd ../../
+    abbr: ...
+    snippet: cd ../../
+
