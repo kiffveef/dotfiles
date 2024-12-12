@@ -1,0 +1,7 @@
+[include]
+  path = ~/.config/git/conf.d/user.conf
+  path = ~/.config/git/conf.d/ghq.conf
+  path = ~/.config/git/conf.d/alias.conf
+
+[init]
+	defaultBranch = main
