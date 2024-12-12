@@ -1,0 +1,17 @@
+abbr -S resh="exec $SHELL -l"
+abbr -S l="lsd -l --group-directories-first"
+abbr -S ll="lsd -lF --group-directories-first"
+abbr -S la="lsd -laF --group-directories-first"
+abbr -S lt="lsd -lF --group-directories-first --tree"
+abbr -S ..="cd .."
+abbr -S ...="cd ../../"
+abbr -S md="mkdir -p"
+abbr -S vn="nvim"
+abbr -S cargo-pkg-update="cargo install-update --all"
+
+abbr -S aptupd="sudo apt update"
+abbr -S aptupg="sudo apt upgrade -y"
+abbr -S aptins="sudo apt install -y"
+
+# git
+abbr -S git-alias="git config -l | grep alias | sed 's/^alias\.//g'"
