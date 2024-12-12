@@ -18,5 +18,8 @@ export HISTFILE=$XDG_STATE_HOME/zsh/history
 export HISTSIZE=10000
 export SAVEHIST=100000
 
+export EDITOR=nvim
+export GIT_EDITOR=nvim
+
 . "$HOME/.cargo/env"
 
