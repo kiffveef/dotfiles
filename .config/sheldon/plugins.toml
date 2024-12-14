@@ -30,19 +30,16 @@ apply = ["defer"]
 github = "zsh-users/zsh-syntax-highlighting"
 apply = ["defer"]
 
-# [plugins.zsh-abbr]
-# github = "olets/zsh-abbr"
-
 [plugins.enhancd]
 github = "b4b4r07/enhancd"
+
+[plugins.gitignore]
+github = "voronkovich/gitignore.plugin.zsh"
 
 # cf. https://bucci.bp7.org/archives/48515/
 [plugins.fzf]
 github = "junegunn/fzf"
 apply = ['fzf-install', 'fzf-source']
-
-# [plugins.rust]
-# inline = 'source "$HOME/.cargo/bin"'
 
 [plugins.zabrze]
 inline = 'eval "$(zabrze init --bind-keys)"'

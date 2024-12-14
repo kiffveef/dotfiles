@@ -113,14 +113,20 @@ abbrevs:
     context: ^git\s
 
   - name: git rebase -i
-    abbr: rbi
-    snippet: rebase -i HEAD~{}
+    abbr: i
+    snippet: -i HEAD~{}
     global: true
-    context: ^git\s
+    context: ^git rebase\s
 
   - name: git reset HEAD
     abbr: unstage
     snippet: reset HEAD
+    global: true
+    context: ^git\s
+
+  - name: git reset --soft HEAD~
+    abbr: cancel
+    snippet: reset --soft HEAD~{}
     global: true
     context: ^git\s
 
@@ -181,4 +187,14 @@ abbrevs:
     abbr: l
     snippet: --list
     context: ^git tag\s
+
+  - name: zsh function _fzf_git_brach_select_friendly
+    abbr: fco
+    snippet: _fzf_git_brach_select_friendly
+
+  - name: gitui
+    abbr: gu
+    snippet: gitui
+    if: (( ${+commands[gitui]} ))
+    
 
