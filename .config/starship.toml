@@ -1,5 +1,5 @@
 [character]
-success_symbol = "[>](bold green)"
+success_symbol = "[❯❯❯](bold green)"
 error_symbol = "[x](bold red)"
 vimcmd_symbol = "[<](bold green)"
 
@@ -50,6 +50,7 @@ symbol = "deno "
 symbol = ".NET "
 
 [directory]
+truncate_to_repo = false
 read_only = " ro"
 
 [docker_context]
