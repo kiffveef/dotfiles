@@ -45,16 +45,22 @@ abbrevs:
     snippet: -m '{}'
     context: ^git commit\s
 
+  - name: git commit --amend
+    abbr: a
+    global: true
+    snippet: --amend
+    context: ^git commit\s
+
+  - name: git commit --allow-empty
+    abbr: emp
+    global: true
+    snippet: --allow-empty
+    context: ^git commit\s
+
   - name: git commit -m WIP
     abbr: wip
     global: true
     snippet: -m 'WIP {}'
-    context: ^git commit\s
-
-  - name: git commit --allow-empty -m
-    abbr: emp
-    global: true
-    snippet: --allow-empty -m '{}'
     context: ^git commit\s
 
   - name: git status --short --branch
@@ -115,6 +121,12 @@ abbrevs:
   - name: git rebase -i
     abbr: i
     snippet: -i HEAD~{}
+    global: true
+    context: ^git rebase\s
+
+  - name: committer-date-is-author-date
+    abbr: cdad
+    snippet: --allow-empty committer-date-is-author-date
     global: true
     context: ^git rebase\s
 
@@ -181,11 +193,13 @@ abbrevs:
   - name: git tag
     abbr: t
     snippet: tag
+    global: true
     context: ^git\s
 
   - name: git tag --list
     abbr: l
     snippet: --list
+    global: true
     context: ^git tag\s
 
   - name: zsh function _fzf_git_brach_select_friendly
@@ -196,5 +210,9 @@ abbrevs:
     abbr: gu
     snippet: gitui
     if: (( ${+commands[gitui]} ))
-    
+
+  - name: git-graph
+    abbr: gg
+    snippet: git-graph
+    if: (( ${+commands[git-graph]} ))
 
