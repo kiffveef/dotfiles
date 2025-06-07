@@ -41,3 +41,5 @@ _fzf_git_brach_select_friendly() {
   git checkout $selected_branch
 }
 
+zle -N _fzf_git_brach_select_friendly
+bindkey "^b" _fzf_git_brach_select_friendly
