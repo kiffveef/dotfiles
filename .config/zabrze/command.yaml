@@ -39,6 +39,12 @@ abbrevs:
     abbr: aptsearch
     snippet: sudo apt-cache search
 
+  - name: cargo package update
+    abbr: pkg-update
+    snippet: install-update --all
+    global: true
+    context: ^cargo\s
+
   # editor
   - name: nvim
     abbr: vn
