@@ -69,6 +69,13 @@ now(function()
     end,
   })
 end)
+now(function()
+  require('mini.notify').setup()
+  vim.notify = require('mini.notify').make_notify({
+    ERROR = { duration = 20000 },
+    WARN = { duration = 20000 }
+  })
+end)
 
 later(function()
   add("https://github.com/vim-jp/vimdoc-ja")
