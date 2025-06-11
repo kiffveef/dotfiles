@@ -7,24 +7,24 @@ abbrevs:
 
   - name: ls -l
     abbr: ll
-    snippet: lsd -lF --group-directories-first
+    snippet: lsd --group-directories-first -laF
     if: (( ${+commands[lsd]} ))
 
   - name: ls -la
     abbr: la
-    snippet: lsd -laF --group-directories-first
+    snippet: lsd --group-directories-first -laF
     if: (( ${+commands[lsd]} ))
 
   - name: ls -l --tree
     abbr: lt
-    snippet: lsd -lF --group-directories-first --tree
+    snippet: lsd --group-directories-first --tree -laF
     if: (( ${+commands[lsd]} ))
 
   # cd
   - name: cd ..
     abbr: ..
     snippet: cd ../
-  
+
   - name: cd ../../
     abbr: ...
     snippet: cd ../../
