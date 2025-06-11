@@ -6,16 +6,16 @@ _G.Config = {
 }
 
 vim.api.nvim_create_user_command(
-    'InitLua',
+    "InitLua",
     function()
         vim.cmd.edit(vim.fn.stdpath("config") .. "/init.lua")
     end,
     {}
 )
 
-local augroup = vim.api.nvim_create_augroup('init.lua', {})
+local augroup = vim.api.nvim_create_augroup("init.lua", {})
 local function create_autocmd(event, opts)
-  vim.api.nvim_create_autocmd(event, vim.tbl_extend('force', {
+  vim.api.nvim_create_autocmd(event, vim.tbl_extend("force", {
     group = augroup,
   }, opts))
 end
@@ -26,7 +26,7 @@ if not vim.loop.fs_stat(mini_path) then
   local clone_cmd = { "git", "clone", "--filter=blob:none", "https://github.com/echasnovski/mini.nvim", mini_path }
   vim.fn.system(clone_cmd)
 end
-require('mini.deps').setup({ path = { package = Config.path_package } })
+require("mini.deps").setup({ path = { package = Config.path_package } })
 
 local add, now, later = MiniDeps.add, MiniDeps.now, MiniDeps.later
 local source = function(path) dofile(Config.path_source .. path) end
@@ -34,7 +34,7 @@ local source = function(path) dofile(Config.path_source .. path) end
 now(function() source("config/options.lua") end)
 now(function() source("config/keymaps.lua") end)
 
-now(function() require('mini.basics').setup({
+now(function() require("mini.basics").setup({
   options = {
     extra_ui = true,
   },
@@ -42,36 +42,36 @@ now(function() require('mini.basics').setup({
     option_toggle_prefix = "m",
   },
 }) end)
-now(function() require('mini.icons').setup() end)
+now(function() require("mini.icons").setup() end)
 now(function() require("mini.starter").setup() end)
 now(function()
-  require('mini.statusline').setup()
+  require("mini.statusline").setup()
   vim.opt.laststatus = 3
   vim.opt.cmdheight = 0
-  create_autocmd({ 'RecordingEnter', 'CmdlineEnter' }, {
-    pattern = '*',
+  create_autocmd({ "RecordingEnter", "CmdlineEnter" }, {
+    pattern = "*",
     callback = function()
       vim.opt.cmdheight = 1
     end,
   })
-  create_autocmd('RecordingLeave', {
-    pattern = '*',
+  create_autocmd("RecordingLeave", {
+    pattern = "*",
     callback = function()
       vim.opt.cmdheight = 0
     end,
   })
-  create_autocmd('CmdlineLeave', {
-    pattern = '*',
+  create_autocmd("CmdlineLeave", {
+    pattern = "*",
     callback = function()
-      if vim.fn.reg_recording() == '' then
+      if vim.fn.reg_recording() == "" then
         vim.opt.cmdheight = 0
       end
     end,
   })
 end)
 now(function()
-  require('mini.notify').setup()
-  vim.notify = require('mini.notify').make_notify({
+  require("mini.notify").setup()
+  vim.notify = require("mini.notify").make_notify({
     ERROR = { duration = 20000 },
     WARN = { duration = 20000 }
   })
@@ -79,18 +79,18 @@ end)
 
 later(function()
   add("https://github.com/vim-jp/vimdoc-ja")
-  vim.opt.helplang:prepend('ja')
+  vim.opt.helplang:prepend("ja")
 end)
-later(function() require('mini.tabline').setup() end)
+later(function() require("mini.tabline").setup() end)
 later(function()
-  require('mini.bufremove').setup()
+  require("mini.bufremove").setup()
 
   vim.api.nvim_create_user_command(
-    'Bufdelete',
+    "Bufdelete",
     function()
       MiniBufremove.delete()
     end,
-    { desc = 'Remove buffer' }
+    { desc = "Remove buffer" }
   )
 end)
 later(function() require("mini.cursorword").setup() end)
@@ -115,26 +115,27 @@ later(function()
   })
 end)
 later(function()
-  local gen_ai_spec = require('mini.extra').gen_ai_spec
-  require('mini.ai').setup({
+  local gen_ai_spec = require("mini.extra").gen_ai_spec
+  require("mini.ai").setup({
     custom_textobjects = {
       B = gen_ai_spec.buffer(),
       D = gen_ai_spec.diagnostic(),
       I = gen_ai_spec.indent(),
       L = gen_ai_spec.line(),
       N = gen_ai_spec.number(),
-      J = { { '()%d%d%d%d%-%d%d%-%d%d()', '()%d%d%d%d%/%d%d%/%d%d()' } }
+      J = { { "()%d%d%d%d%-%d%d%-%d%d()", "()%d%d%d%d%/%d%d%/%d%d()" } }
     },
   })
 end)
 later(function()
-  require('mini.splitjoin').setup({
+  require("mini.splitjoin").setup({
     mappings = {
-      toggle = 'gS',
-      split = 'ss',
-      join = 'sj',
+      toggle = "gS",
+      split = "ss",
+      join = "sj",
     },
   })
 end)
-later(function() require('mini.move').setup() end)
+later(function() require("mini.move").setup() end)
+later(function() require("mini.diff").setup() end)
 later(function() source("theme/rose-pine.lua") end)
