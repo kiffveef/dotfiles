@@ -71,7 +71,7 @@ now(function()
 end)
 
 later(function()
-  add("https://github.con/vim-jp/vimdoc-ja")
+  add("https://github.com/vim-jp/vimdoc-ja")
   vim.opt.helplang:prepend('ja')
 end)
 later(function() require('mini.tabline').setup() end)
@@ -100,7 +100,13 @@ later(function()
   )
 end)
 later(function() require("mini.pairs").setup() end)
-later(function() require("mini.surround").setup() end)
+later(function()
+  require("mini.surround").setup({
+    draw = {
+      delay = 30,
+    }
+  })
+end)
 later(function()
   local gen_ai_spec = require('mini.extra').gen_ai_spec
   require('mini.ai').setup({
