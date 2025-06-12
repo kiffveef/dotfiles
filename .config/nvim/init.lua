@@ -31,36 +31,31 @@ require("mini.deps").setup({ path = { package = Config.path_package } })
 local add, now, later = MiniDeps.add, MiniDeps.now, MiniDeps.later
 local source = function(path) dofile(Config.path_source .. path) end
 
-now(function() source("config/options.lua") end)
-now(function() source("config/keymaps.lua") end)
-
-now(function() require("mini.basics").setup({
-  options = {
-    extra_ui = true,
-  },
-  mappings = {
-    option_toggle_prefix = "m",
-  },
-}) end)
-now(function() require("mini.icons").setup() end)
-now(function() require("mini.starter").setup() end)
 now(function()
+  source("config/options.lua")
+  source("config/keymaps.lua")
+  require("mini.basics").setup({
+    options = { extra_ui = true },
+    mappings = { option_toggle_prefix = "m" },
+  })
+  require("mini.icons").setup()
+  require("mini.starter").setup()
   require("mini.statusline").setup()
   vim.opt.laststatus = 3
   vim.opt.cmdheight = 0
-  create_autocmd({ "RecordingEnter", "CmdlineEnter" }, {
+  vim.api.nvim_create_autocmd({ "RecordingEnter", "CmdlineEnter" }, {
     pattern = "*",
     callback = function()
       vim.opt.cmdheight = 1
     end,
   })
-  create_autocmd("RecordingLeave", {
+  vim.api.nvim_create_autocmd("RecordingLeave", {
     pattern = "*",
     callback = function()
       vim.opt.cmdheight = 0
     end,
   })
-  create_autocmd("CmdlineLeave", {
+  vim.api.nvim_create_autocmd("CmdlineLeave", {
     pattern = "*",
     callback = function()
       if vim.fn.reg_recording() == "" then
@@ -68,8 +63,6 @@ now(function()
       end
     end,
   })
-end)
-now(function()
   require("mini.notify").setup()
   vim.notify = require("mini.notify").make_notify({
     ERROR = { duration = 20000 },
@@ -80,62 +73,43 @@ end)
 later(function()
   add("https://github.com/vim-jp/vimdoc-ja")
   vim.opt.helplang:prepend("ja")
-end)
-later(function() require("mini.tabline").setup() end)
-later(function()
-  require("mini.bufremove").setup()
 
+  require("mini.tabline").setup()
+  require("mini.bufremove").setup()
   vim.api.nvim_create_user_command(
-    "Bufdelete",
+    "BufDelete",
     function()
       MiniBufremove.delete()
     end,
-    { desc = "Remove buffer" }
+    {}
   )
-end)
-later(function() require("mini.cursorword").setup() end)
-later(function() require("mini.indentscope").setup() end)
-later(function()
-  require("mini.trailspace").setup()
-  vim.api.nvim_create_user_command(
-    "Trim",
-    function()
-      MiniTailspace.trim()
-      MiniTailspace.trim_last_line()
-    end,
-    { desc = "Trim trailing whitespace and last line" }
-  )
-end)
-later(function() require("mini.pairs").setup() end)
-later(function()
-  require("mini.surround").setup({
-    draw = {
-      delay = 30,
+  require("mini.comment").setup({
+    options = {
+      ignore_blank_line = true,
+      start_of_line = true,
+    },
+    mappings = {
+      comment = "<Leader>/",
+      comment_line = "<Leader>/",
+      comment_visual = "<Leader>/",
     }
   })
-end)
-later(function()
-  local gen_ai_spec = require("mini.extra").gen_ai_spec
-  require("mini.ai").setup({
-    custom_textobjects = {
-      B = gen_ai_spec.buffer(),
-      D = gen_ai_spec.diagnostic(),
-      I = gen_ai_spec.indent(),
-      L = gen_ai_spec.line(),
-      N = gen_ai_spec.number(),
-      J = { { "()%d%d%d%d%-%d%d%-%d%d()", "()%d%d%d%d%/%d%d%/%d%d()" } }
-    },
+  require("mini.cursorword").setup()
+  require("mini.indentscope").setup()
+  require("mini.trailspace").setup()
+  vim.api.nvim_create_autocmd({ "BufWritePre" }, {
+    callback = function()
+      MiniTrailspace.trim()
+      MiniTrailspace.trim_last_lines()
+    end,
   })
+  require("mini.pairs").setup()
+  require("mini.surround").setup({ draw = { delay = 30 } })
+  require("mini.splitjoin").setup({ mappings = { toggle = "<Leader>s" } })
+  require("mini.move").setup()
+  require("mini.align").setup()
+  require("mini.diff").setup()
+
+  -- colorscheme
+  source("theme/nordic.lua")
 end)
-later(function()
-  require("mini.splitjoin").setup({
-    mappings = {
-      toggle = "gS",
-      split = "ss",
-      join = "sj",
-    },
-  })
-end)
-later(function() require("mini.move").setup() end)
-later(function() require("mini.diff").setup() end)
-later(function() source("theme/rose-pine.lua") end)
