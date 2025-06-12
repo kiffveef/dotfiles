@@ -40,6 +40,8 @@ now(function()
   })
   require("mini.icons").setup()
   require("mini.starter").setup()
+  require("mini.misc").setup()
+  MiniMisc.setup_restore_cursor()
   require("mini.statusline").setup()
   vim.opt.laststatus = 3
   vim.opt.cmdheight = 0
@@ -94,7 +96,7 @@ later(function()
       comment_visual = "<Leader>/",
     }
   })
-  require("mini.cursorword").setup()
+  require("mini.cursorword").setup({ draw = { delay = 200 } })
   require("mini.indentscope").setup()
   require("mini.trailspace").setup()
   vim.api.nvim_create_autocmd({ "BufWritePre" }, {
@@ -110,6 +112,32 @@ later(function()
   require("mini.align").setup()
   require("mini.diff").setup()
 
+  add({
+    source = "https://github.com/nvim-treesitter/nvim-treesitter",
+    hooks = {
+      post_checkout = function()
+        vim.cmd.TSUpdate()
+      end
+    },
+  })
+  require("nvim-treesitter.configs").setup({
+    ensure_installed = {
+      "lua",
+      "vim",
+      "bash",
+      "git_config",
+      "git_rebase",
+      "gitattributes",
+      "gitcommit",
+      "gitignore",
+      "ruby",
+      "dockerfile",
+      "yaml",
+      "toml",
+    },
+    highlight = { enable = true },
+  })
+
   -- colorscheme
-  source("theme/nordic.lua")
+  source("theme/rose-pine.lua")
 end)
