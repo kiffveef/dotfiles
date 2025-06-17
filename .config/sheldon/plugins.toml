@@ -41,6 +41,12 @@ github = "voronkovich/gitignore.plugin.zsh"
 github = "junegunn/fzf"
 apply = ['fzf-install', 'fzf-source']
 
+[plugins.forgit]
+github = "wfxr/forgit"
+rev = "25.02.0"
+use = ["forgit.plugin.zsh"]
+apply = ["source", "forgit-bin", "forgit-copy", "forgit-graph"]
+
 [plugins.zabrze]
 inline = 'eval "$(zabrze init --bind-keys)"'
 
@@ -58,4 +64,6 @@ PATH = 'export PATH="$PATH:{{ dir }}"'
 defer = "{% for file in files %}zsh-defer source \"{{ file }}\"\n{% endfor %}"
 fzf-install = "{{ dir }}/install --bin > /dev/null \n[[ ! $PATH =~ {{ dir }} ]] && export PATH=\"$PATH:{{ dir }}/bin\"\n"
 fzf-source = "{% for file in files %}source \"{{ file }}\"\n{% endfor %}"
-
+forgit-bin = 'PATH="$PATH:$FORGIT_INSTALL_DIR/bin"'
+forgit-copy = "export FORGIT_COPY_CMD='bp'"
+forgit-graph = "export FORGIT_LOG_GRAPH_ENABLE=true"

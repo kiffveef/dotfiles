@@ -2,6 +2,14 @@ abbrevs:
   - name: git
     abbr: gti
     snippet: git
+    global: true
+    if: (( ${+commands[git]} ))
+
+  - name: git sub-command forgit
+    abbr: f
+    snippet: forgit
+    global: true
+    if: (( ${+commands[git-forgit]} ))
 
   - name: git add
     abbr: ad
@@ -9,15 +17,34 @@ abbrevs:
     global: true
     context: ^git\s
 
-  - name: git branch --all
-    abbr: branches
-    snippet: branch -a
+  - name: git branch
+    abbr: b
+    snippet: branch
     global: true
     context: ^git\s
 
+  - name: git branch --all
+    abbr: A
+    snippet: branch -a
+    global: true
+    context: ^git branch\s
+
   - name: git branch --list
-    abbr: b
+    abbr: ls
     snippet: branch -l
+    global: true
+    context: ^git branch\s
+
+  - name: git branch rename
+    abbr: m
+    snippet: branch -m
+    global: true
+    context: ^git branch\s
+
+  - name: current branch name
+    abbr: current
+    snippet: $(git symbolic-ref --short HEAD)
+    evaluate: true
     global: true
     context: ^git\s
 
@@ -32,7 +59,28 @@ abbrevs:
     snippet: -b
     global: true
     context: ^git checkout\s
-  
+
+  - name: git sub-command forgit checkout_branch
+    abbr: cob
+    snippet: checkout_branch
+    global: true
+    context: ^git forgit\s
+    if: (( ${+commands[git-forgit]} ))
+
+  - name: git sub-command forgit checkout_file
+    abbr: cof
+    snippet: checkout_file
+    global: true
+    context: ^git forgit\s
+    if: (( ${+commands[git-forgit]} ))
+
+  - name: git sub-command forgit checkout_tag
+    abbr: cot
+    snippet: checkout_tag
+    global: true
+    context: ^git forgit\s
+    if: (( ${+commands[git-forgit]} ))
+
   - name: git commit
     abbr: cm
     snippet: commit
@@ -122,13 +170,13 @@ abbrevs:
     abbr: i
     snippet: -i HEAD~{}
     global: true
-    context: ^git rebase\s
+    context: ^git.+rebase\s
 
   - name: committer-date-is-author-date
     abbr: cdad
     snippet: --allow-empty committer-date-is-author-date
     global: true
-    context: ^git rebase\s
+    context: ^git.+rebase\s
 
   - name: git reset HEAD
     abbr: unstage
@@ -142,7 +190,7 @@ abbrevs:
     global: true
     context: ^git\s
 
-  - name: git stash 
+  - name: git stash
     abbr: ss
     snippet: stash
     global: true
@@ -215,4 +263,3 @@ abbrevs:
     abbr: gg
     snippet: git-graph
     if: (( ${+commands[git-graph]} ))
-
