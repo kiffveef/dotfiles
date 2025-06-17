@@ -73,6 +73,9 @@ now(function()
 end)
 
 later(function()
+  source("plugins/treesitter.lua")
+  source("plugins/telescope.lua")
+
   add("https://github.com/vim-jp/vimdoc-ja")
   vim.opt.helplang:prepend("ja")
 
@@ -111,32 +114,6 @@ later(function()
   require("mini.move").setup()
   require("mini.align").setup()
   require("mini.diff").setup()
-
-  add({
-    source = "https://github.com/nvim-treesitter/nvim-treesitter",
-    hooks = {
-      post_checkout = function()
-        vim.cmd.TSUpdate()
-      end
-    },
-  })
-  require("nvim-treesitter.configs").setup({
-    ensure_installed = {
-      "lua",
-      "vim",
-      "bash",
-      "git_config",
-      "git_rebase",
-      "gitattributes",
-      "gitcommit",
-      "gitignore",
-      "ruby",
-      "dockerfile",
-      "yaml",
-      "toml",
-    },
-    highlight = { enable = true },
-  })
 
   -- colorscheme
   source("theme/rose-pine.lua")
