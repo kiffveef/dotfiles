@@ -1,14 +1,19 @@
 #!/usr/bin/env bash
-# git-core PPA から最新の git を入れる。
-# dotfiles を clone する前に実行する想定なので、素の Ubuntu にある道具だけで動くようにしている
-# (rg/fd などはまだ無いため grep を使う)。
+# dotfiles を clone して make を使えるようにするまでの事前準備。
+#   - git (git-core PPA の最新版)
+#   - build-essential (make を含む。Ruby のビルドにも必要)
+#   - curl, ca-certificates (後続のインストーラ取得用)
+#
+# clone 前に単体で実行する想定なので、scripts/lib.sh には依存しない。
+# 素の Ubuntu にある道具だけで動くようにしている (rg/fd などはまだ無いため grep を使う)。
 #
 # 使い方:
-#   bash install-git.sh
-#   GIT_PPA=ppa:git-core/candidate bash install-git.sh   # PPA を差し替える場合
+#   curl -fsSL https://raw.githubusercontent.com/kiffveef/dotfiles/main/scripts/prerequisites.sh | bash
+#   GIT_PPA=ppa:git-core/candidate bash prerequisites.sh   # PPA を差し替える場合
 set -euo pipefail
 
 readonly GIT_PPA="${GIT_PPA:-ppa:git-core/ppa}"
+readonly BASE_PACKAGES=(git build-essential curl ca-certificates)
 
 log()  { printf '\033[1;34m==>\033[0m %s\n' "$*"; }
 die()  { printf '\033[1;31mERROR:\033[0m %s\n' "$*" >&2; exit 1; }
@@ -26,8 +31,8 @@ else
   SUDO="sudo"
 fi
 
-# --- PPA 追加 -------------------------------------------------------------
-# "ppa:git-core/ppa" -> sources ファイル名に含まれる "git-core" "ppa" で既存判定する。
+# --- git-core PPA ---------------------------------------------------------
+# "ppa:git-core/ppa" -> sources ファイル内の URL で既存判定する。
 # 26.04 は deb822 形式 (.sources)、古い版は .list なので両方を見る。
 ppa_owner="${GIT_PPA#ppa:}"; ppa_owner="${ppa_owner%%/*}"
 ppa_name="${GIT_PPA##*/}"
@@ -46,11 +51,12 @@ else
     || die "${GIT_PPA} の追加に失敗。${VERSION_CODENAME:-この版} 向けのビルドが PPA にあるか確認"
 fi
 
-# --- git インストール -----------------------------------------------------
-before="$(git --version 2>/dev/null || echo 'none')"
-log "git をインストール/更新"
+# --- 基本パッケージ -------------------------------------------------------
+git_before="$(git --version 2>/dev/null || echo 'none')"
+log "インストール/更新: ${BASE_PACKAGES[*]}"
 $SUDO apt-get update -qq
-$SUDO apt-get install -y -qq git
+$SUDO apt-get install -y -qq "${BASE_PACKAGES[@]}"
 
-after="$(git --version)"
-log "完了: ${before} -> ${after}"
+log "git: ${git_before} -> $(git --version)"
+log "make: $(make --version | head -1)"
+log "完了。次は dotfiles を clone して make bootstrap"

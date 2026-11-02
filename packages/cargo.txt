@@ -1,22 +1,40 @@
-bat
-bp
+# cargo でインストールするツール
+# 書式: <crate名> [cargo install に渡す追加引数]
+#   - 追加引数なし → crates.io から cargo binstall (ビルド済みバイナリがあれば使い、無ければビルド)
+#   - 追加引数あり → cargo install <追加引数> <crate名> (git 等からビルド)
+#
+# mise は公式インストーラ (mise.run) で入れるためここには含めない。
+
 cargo-binstall
 cargo-update
+
+# --- CLI ---
+bat
+bp
 fd-find
-file-search-mcp
 git-delta
-hagi
 headtail
-hisho-cli
 lindera-cli
 lsd
 memocr
-mise
 ripgrep
+
+# --- シェル環境 ---
 sheldon
 starship
-todo
-yazi-cli
-yazi-fm
 zabrze
 zellij
+
+# --- ファイラ ---
+yazi-fm
+yazi-cli
+
+# --- git から ---
+todo             --git https://github.com/thekuwayama/todo.git --branch main
+file-search-mcp  --git https://github.com/Kurogoma4D/file-search-mcp.git
+hagi             --git https://github.com/kiffveef/hagi.git
+
+# --- 手動 ---
+# hisho-cli: ローカルのリポジトリからビルドしていたもの。
+#   tangled.org の hisho を ghq get した後に:
+#   cargo install --path <hisho>/crates/hisho-cli

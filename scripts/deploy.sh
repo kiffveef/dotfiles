@@ -14,18 +14,15 @@
 # 素の Ubuntu (rg/fd 未導入) でも動くよう bash と coreutils だけで書いている。
 set -euo pipefail
 
-readonly DOTFILES_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+# shellcheck source-path=SCRIPTDIR source=lib.sh
+. "$(dirname "${BASH_SOURCE[0]}")/lib.sh"   # DOTFILES_DIR, log/ok/act/warn/die
+
 readonly LINKS_FILE="${DOTFILES_LINKS_FILE:-$DOTFILES_DIR/links.conf}"
-readonly BACKUP_DIR="${XDG_STATE_HOME:-$HOME/.local/state}/dotfiles/backup/$(date +%Y%m%d-%H%M%S)"
+BACKUP_DIR="${XDG_STATE_HOME:-$HOME/.local/state}/dotfiles/backup/$(date +%Y%m%d-%H%M%S)"
+readonly BACKUP_DIR
 
 DRY_RUN=false
 FORCE=false
-
-log()  { printf '\033[1;34m==>\033[0m %s\n' "$*"; }
-ok()   { printf '  \033[32m✓\033[0m %s\n' "$*"; }
-act()  { printf '  \033[33m→\033[0m %s\n' "$*"; }
-warn() { printf '  \033[1;33m!\033[0m %s\n' "$*" >&2; }
-die()  { printf '\033[1;31mERROR:\033[0m %s\n' "$*" >&2; exit 1; }
 
 # dry-run 時は実行せず表示だけ
 run() {
@@ -36,7 +33,7 @@ run() {
   fi
 }
 
-usage() { sed -n '2,15p' "${BASH_SOURCE[0]}" | sed 's/^# \{0,1\}//'; }
+usage() { print_header_help "${BASH_SOURCE[0]}"; }
 
 parse_args() {
   while (($#)); do
