@@ -62,32 +62,46 @@ install_binstall() {
 }
 
 install_cargo_tools() {
-  local -a registry=() line_args
+  local -a registry=() custom=() failed=() line_args
   local line crate installed
+
+  # 一覧を crates.io のものと、追加引数付き (git 等) に振り分ける
+  while IFS= read -r line; do
+    read -ra line_args <<<"$line"
+    if ((${#line_args[@]} == 1)); then
+      registry+=("${line_args[0]}")
+    else
+      custom+=("$line")
+    fi
+  done < <(read_list "$DOTFILES_DIR/packages/cargo.txt")
+
+  # crates.io のものを先に入れる。git 側の1つがビルドに失敗しても、こちらは入っているように
+  if ((${#registry[@]})); then
+    act "crates.io から ${#registry[@]} 個 (インストール済みはスキップ)"
+    cargo binstall --no-confirm "${registry[@]}" || failed+=("crates.io の一部 (上のログを参照)")
+  fi
 
   # 先に一度だけ取得する。cargo install --list | grep -q とすると、grep が先に終了した際に
   # cargo が SIGPIPE で落ち、pipefail によって「未インストール」と誤判定されることがある
   installed="$(cargo install --list)"
 
-  while IFS= read -r line; do
+  for line in "${custom[@]}"; do
     read -ra line_args <<<"$line"
     crate="${line_args[0]}"
-    if ((${#line_args[@]} == 1)); then
-      registry+=("$crate")
-    else
-      # git 等: 既にあればスキップ (更新は update ステップで cargo install-update が行う)
-      if grep -q "^${crate} " <<<"$installed"; then
-        ok "$crate (git)"
-      else
-        act "$crate を ${line_args[*]:1} からビルド"
-        cargo install "${line_args[@]:1}" "$crate"
-      fi
+    # 既にあればスキップ (更新は update ステップで cargo install-update が行う)
+    if grep -q "^${crate} " <<<"$installed"; then
+      ok "$crate (git)"
+      continue
     fi
-  done < <(read_list "$DOTFILES_DIR/packages/cargo.txt")
+    act "$crate を ${line_args[*]:1} からビルド"
+    # --locked: リポジトリの Cargo.lock どおりに依存を固定する。
+    # 付けないとビルド時点の最新の依存で解決し直すため、上流の破壊的変更で壊れることがある
+    cargo install --locked "${line_args[@]:1}" "$crate" || failed+=("$crate")
+  done
 
-  if ((${#registry[@]})); then
-    act "crates.io から ${#registry[@]} 個 (インストール済みはスキップ)"
-    cargo binstall --no-confirm "${registry[@]}"
+  if ((${#failed[@]})); then
+    warn "失敗: ${failed[*]}"
+    die "cargo ツールの一部をインストールできなかった。packages/cargo.txt を確認すること"
   fi
 }
 

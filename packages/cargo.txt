@@ -1,7 +1,8 @@
 # cargo でインストールするツール
 # 書式: <crate名> [cargo install に渡す追加引数]
 #   - 追加引数なし → crates.io から cargo binstall (ビルド済みバイナリがあれば使い、無ければビルド)
-#   - 追加引数あり → cargo install <追加引数> <crate名> (git 等からビルド)
+#   - 追加引数あり → cargo install --locked <追加引数> <crate名> (git 等からビルド)
+#     --locked はリポジトリの Cargo.lock どおりに依存を固定する (bootstrap.sh 側で付与)
 #
 # mise は公式インストーラ (mise.run) で入れるためここには含めない。
 
@@ -31,7 +32,9 @@ yazi-cli
 
 # --- git から ---
 todo             --git https://github.com/thekuwayama/todo.git --branch main
-file-search-mcp  --git https://github.com/Kurogoma4D/file-search-mcp.git
+# file-search-mcp: HEAD (3538441) は rmcp を git main に依存させており、rmcp 側の破壊的変更で
+# ビルドできない。upstream は 2025-04 以降更新が無いため、crates.io の rmcp 0.1 を使う版に固定
+file-search-mcp  --git https://github.com/Kurogoma4D/file-search-mcp.git --rev 46eb091
 hagi             --git https://github.com/kiffveef/hagi.git
 
 # --- 手動 ---
