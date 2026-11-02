@@ -1,0 +1,107 @@
+{
+  "respectGitignore": true,
+  "env": {},
+  "attribution": {
+    "commit": "",
+    "pr": "",
+    "sessionUrl": false
+  },
+  "permissions": {
+    "allow": [
+      "Read(**)",
+      "Edit(**/*.rs)",
+      "Edit(**/*.toml)",
+      "Edit(**/*.md)",
+      "Edit(**/*.json)",
+      "Edit(**/*.sql)",
+      "Edit(//tmp/**)",
+      "Bash(git checkout:*)",
+      "Bash(git commit:*)",
+      "Bash(git merge:*)",
+      "Bash(git rebase:*)",
+      "Bash(git branch:*)",
+      "Bash(git status:*)",
+      "Bash(git diff:*)",
+      "Bash(git log:*)",
+      "Bash(git add:*)",
+      "Bash(git show:*)",
+      "Bash(git stash:*)",
+      "Bash(git fetch:*)",
+      "Bash(git tag:*)",
+      "Bash(cargo:*)",
+      "Bash(rg:*)",
+      "Bash(fd:*)",
+      "Bash(bat:*)",
+      "Bash(npx:*)",
+      "Bash(uv:*)",
+      "Bash(jq:*)",
+      "Bash(curl:*)",
+      "Bash(ls:*)",
+      "Bash(mkdir:*)",
+      "Bash(cp:*)",
+      "Bash(mv:*)",
+      "mcp__serena__*",
+      "mcp__context7__*",
+      "mcp__memory__*",
+      "WebSearch",
+      "WebFetch"
+    ],
+    "deny": [
+      "Bash(rm:*)",
+      "Bash(sudo:*)",
+      "Bash(chmod 777:*)",
+      "Bash(git push:*)",
+      "Bash(git reset --hard:*)",
+      "Bash(cat:*)",
+      "Bash(grep:*)",
+      "Bash(find:*)",
+      "Read(id_rsa)",
+      "Read(id_ed25519)",
+      "Read(**/.ssh/**)",
+      "Edit(.env*)",
+      "Edit(**/.env*)",
+      "Bash(wget:*)"
+    ]
+  },
+  "model": "opus",
+  "enableAllProjectMcpServers": false,
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash .claude/hooks/check-claude-git.sh"
+          }
+        ]
+      }
+    ]
+  },
+  "enabledPlugins": {
+    "rust-analyzer-lsp@claude-plugins-official": true,
+    "natural-japanese@natural-japanese": true
+  },
+  "extraKnownMarketplaces": {
+    "kiffveef-plugins": {
+      "source": {
+        "source": "directory",
+        "path": "/home/kiffveef/workspace/github.com/kiffveef/claude-plugins"
+      }
+    },
+    "natural-japanese": {
+      "source": {
+        "source": "github",
+        "repo": "coji/natural-japanese"
+      }
+    }
+  },
+  "language": "japanese",
+  "spinnerTipsEnabled": true,
+  "alwaysThinkingEnabled": true,
+  "autoUpdatesChannel": "latest",
+  "tui": "fullscreen",
+  "autoMemoryEnabled": true,
+  "theme": "dark-daltonized",
+  "preferredNotifChannel": "auto"
+}
