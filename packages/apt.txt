@@ -1,0 +1,42 @@
+# 新環境で apt install する一覧 (apt-mark showmanual からベースシステム分を除外)
+# 使い方: rg -v '^\s*(#|$)' apt.txt | xargs sudo apt install -y
+
+# --- ビルド基盤 ---
+build-essential
+clang
+cmake
+make
+pkg-config
+patchelf
+
+# --- 開発用ライブラリ (Rust/Python/Ruby/Tauri系のビルドで必要) ---
+libclang-dev
+libffi-dev
+libssl-dev
+libsqlite3-dev
+libyaml-dev
+zlib1g-dev
+libglib2.0-dev
+librsvg2-dev
+libwebkit2gtk-4.1-dev
+libappindicator3-dev
+
+# --- CLI ---
+zsh
+curl
+jq
+zip
+zstd
+sqlite3
+poppler-utils
+gnupg-agent
+
+# --- 用途を要確認 (旧環境で何かのために入れたもの) ---
+# apktool          # Android APK解析
+# libfuse2t64      # AppImage実行用
+# libsdl2-2.0-0    # SDL依存アプリ
+# libsndio7.0
+# libpixman-1-0
+
+# --- Docker (公式リポジトリの追加が先に必要。bootstrapで別処理) ---
+# docker-ce docker-ce-cli containerd.io docker-compose-plugin
