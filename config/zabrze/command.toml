@@ -1,0 +1,73 @@
+[[snippets]]
+name = "reload shell"
+trigger = "resh"
+snippet = "exec $SHELL -l"
+
+[[snippets]]
+name = "mkdir -p"
+trigger = "md"
+snippet = "mkdir -p"
+
+[[snippets]]
+name = "bat"
+trigger = "cat"
+snippet = "bat"
+if = "(( ${+commands[bat]} ))"
+
+# apt
+[[snippets]]
+name = "sudo apt"
+trigger = "apt"
+snippet = "sudo apt"
+
+[[snippets]]
+name = "apt update"
+trigger = "upd"
+snippet = "update"
+global = true
+context = '^sudo apt\s'
+
+[[snippets]]
+name = "sudo apt upgrade"
+trigger = "upg"
+snippet = "upgrade -y"
+global = true
+context = '^sudo apt\s'
+
+[[snippets]]
+name = "sudo apt install"
+trigger = "ins"
+snippet = "install -y"
+global = true
+context = '^sudo apt\s'
+
+[[snippets]]
+name = "apt package search"
+trigger = "aptsearch"
+snippet = "sudo apt-cache search"
+
+[[snippets]]
+name = "cargo package update"
+trigger = "pkg-update"
+snippet = "install-update --all"
+global = true
+context = '^cargo\s'
+
+# editor
+[[snippets]]
+name = "nvim"
+trigger = "vn"
+snippet = "nvim"
+if = "(( ${+commands[nvim]} ))"
+
+[[snippets]]
+name = "nvim"
+trigger = "vim"
+snippet = "nvim"
+if = "(( ${+commands[nvim]} ))"
+
+[[snippets]]
+name = ""
+trigger = "ze"
+snippet = "zellij"
+if = "(( ${+commands[zellij]} ))"

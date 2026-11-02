@@ -1,0 +1,367 @@
+[[snippets]]
+name = "git"
+trigger = "gti"
+snippet = "git"
+global = true
+if = "(( ${+commands[git]} ))"
+
+[[snippets]]
+name = "git sub-command forgit"
+trigger = "f"
+snippet = "forgit"
+global = true
+context = '^git\s'
+if = "(( ${+commands[git-forgit]} ))"
+
+[[snippets]]
+name = "git sub-command forgit"
+trigger = "gf"
+snippet = "git forgit"
+global = true
+if = "(( ${+commands[git-forgit]} ))"
+
+[[snippets]]
+name = "git sub-command forgit"
+trigger = "fg"
+snippet = "git forgit"
+global = true
+if = "(( ${+commands[git-forgit]} ))"
+
+[[snippets]]
+name = "git add"
+trigger = "ad"
+snippet = "add -vA"
+global = true
+context = '^git\s'
+
+[[snippets]]
+name = "git branch"
+trigger = "b"
+snippet = "branch"
+global = true
+context = '^git\s'
+
+[[snippets]]
+name = "git branch --all"
+trigger = "A"
+snippet = "-a"
+global = true
+context = '^git branch\s'
+
+[[snippets]]
+name = "git branch --list"
+trigger = "ls"
+snippet = "-l"
+global = true
+context = '^git branch\s'
+
+[[snippets]]
+name = "git branch rename"
+trigger = "m"
+snippet = "-m"
+global = true
+context = '^git branch\s'
+
+[[snippets]]
+name = "current branch name"
+trigger = "current"
+snippet = "$(git symbolic-ref --short HEAD)"
+evaluate = true
+global = true
+context = '^git\s'
+
+[[snippets]]
+name = "git checkout"
+trigger = "co"
+snippet = "checkout"
+global = true
+context = '^git\s'
+
+[[snippets]]
+name = "git checkout -b"
+trigger = "b"
+snippet = "-b"
+global = true
+context = '^git checkout\s'
+
+[[snippets]]
+name = "git sub-command forgit checkout_branch"
+trigger = "cob"
+snippet = "checkout_branch"
+global = true
+context = '^git forgit\s'
+if = "(( ${+commands[git-forgit]} ))"
+
+[[snippets]]
+name = "git sub-command forgit checkout_file"
+trigger = "cof"
+snippet = "checkout_file"
+global = true
+context = '^git forgit\s'
+if = "(( ${+commands[git-forgit]} ))"
+
+[[snippets]]
+name = "git sub-command forgit checkout_tag"
+trigger = "cot"
+snippet = "checkout_tag"
+global = true
+context = '^git forgit\s'
+if = "(( ${+commands[git-forgit]} ))"
+
+[[snippets]]
+name = "git sub-command forgit cherry_pick"
+trigger = "pick"
+snippet = "cherry_pick"
+global = true
+context = '^git forgit\s'
+if = "(( ${+commands[git-forgit]} ))"
+
+[[snippets]]
+name = "git commit"
+trigger = "cm"
+snippet = "commit"
+global = true
+context = '^git\s'
+
+[[snippets]]
+name = "git commit -m"
+trigger = "m"
+global = true
+snippet = "-m '{}'"
+context = '^git commit\s'
+
+[[snippets]]
+name = "git commit --amend"
+trigger = "a"
+global = true
+snippet = "--amend"
+context = '^git commit\s'
+
+[[snippets]]
+name = "git commit --allow-empty"
+trigger = "emp"
+global = true
+snippet = "--allow-empty"
+context = '^git commit\s'
+
+[[snippets]]
+name = "git first commit"
+trigger = "first"
+global = true
+snippet = "-m '🌱' --allow-empty"
+context = '^git commit\s'
+if = '[[ "$PWD" == *kiffveef* ]]'
+
+[[snippets]]
+name = "git commit -m add"
+trigger = "add"
+global = true
+snippet = "-m '✨ {}'"
+context = '^git commit\s'
+if = '[[ "$PWD" == *kiffveef* ]]'
+
+[[snippets]]
+name = "git commit -m update"
+trigger = "update"
+global = true
+snippet = "-m '🔄 {}'"
+context = '^git commit\s'
+if = '[[ "$PWD" == *kiffveef* ]]'
+
+[[snippets]]
+name = "git commit -m fix"
+trigger = "fix"
+global = true
+snippet = "-m '🐛 {}'"
+context = '^git commit\s'
+if = '[[ "$PWD" == *kiffveef* ]]'
+
+[[snippets]]
+name = "git commit -m wip"
+trigger = "wip"
+global = true
+snippet = "-m '🚧 {}'"
+context = '^git commit\s'
+if = '[[ "$PWD" == *kiffveef* ]]'
+
+[[snippets]]
+name = "git commit -m tweak"
+trigger = "tweak"
+global = true
+snippet = "-m '🐤 {}'"
+context = '^git commit\s'
+if = '[[ "$PWD" == *kiffveef* ]]'
+
+[[snippets]]
+name = "git status --short --branch"
+trigger = "st"
+snippet = "status -sb"
+global = true
+context = '^git\s'
+
+[[snippets]]
+name = "git pull"
+trigger = "pl"
+snippet = "pull"
+global = true
+context = '^git\s'
+
+[[snippets]]
+name = "git pull --rebase"
+trigger = "plrb"
+snippet = "pull --rebase origin {}"
+global = true
+context = '^git\s'
+
+# https://zenn.dev/imaizume/articles/61d37580ef6cdb
+[[snippets]]
+name = "git pull origin <current branch>"
+trigger = "ploh"
+snippet = "pull origin $(git rev-parse --abbrev-ref HEAD)"
+global = true
+context = '^git\s'
+
+[[snippets]]
+name = "git push"
+trigger = "p"
+snippet = "push"
+global = true
+context = '^git\s'
+
+[[snippets]]
+name = "git push --set-upstream"
+trigger = "u"
+snippet = "-u"
+global = true
+context = '^git push\s'
+
+[[snippets]]
+name = "git push origin HEAD"
+trigger = "oh"
+snippet = "origin HEAD"
+global = true
+context = '^git push\s'
+
+[[snippets]]
+name = "git push --force-with-lease"
+trigger = "force"
+snippet = "--force-with-lease"
+global = true
+context = '^git push\s'
+
+[[snippets]]
+name = "git rebase"
+trigger = "rb"
+snippet = "rebase"
+global = true
+context = '^git\s'
+
+[[snippets]]
+name = "git rebase -i"
+trigger = "i"
+snippet = "-i HEAD~{}"
+global = true
+context = '^git.+rebase\s'
+
+[[snippets]]
+name = "committer-date-is-author-date"
+trigger = "cdad"
+snippet = "--allow-empty committer-date-is-author-date"
+global = true
+context = '^git.+rebase\s'
+
+[[snippets]]
+name = "git reset HEAD"
+trigger = "unstage"
+snippet = "reset HEAD"
+global = true
+context = '^git\s'
+
+[[snippets]]
+name = "git reset --soft HEAD~"
+trigger = "cancel"
+snippet = "reset --soft HEAD~{}"
+global = true
+context = '^git\s'
+
+[[snippets]]
+name = "git stash"
+trigger = "ss"
+snippet = "stash"
+global = true
+context = '^git\s'
+
+[[snippets]]
+name = "git stash apply"
+trigger = "app"
+snippet = "apply stash@{{}}"
+global = true
+context = '^git stash\s'
+
+[[snippets]]
+name = "git stash clear"
+trigger = "c"
+snippet = "clear"
+global = true
+context = '^git stash\s'
+
+[[snippets]]
+name = "git stash drop"
+trigger = "d"
+snippet = "drop stash@{{}}"
+global = true
+context = '^git stash\s'
+
+[[snippets]]
+name = "git stash list"
+trigger = "l"
+snippet = "list"
+global = true
+context = '^git stash\s'
+
+[[snippets]]
+name = "git stash pop"
+trigger = "p"
+snippet = "pop stash@{{}}"
+global = true
+context = '^git stash\s'
+
+[[snippets]]
+name = "git stash save --include-untracked"
+trigger = "u"
+snippet = "save -u '{}'"
+global = true
+context = '^git stash\s'
+
+[[snippets]]
+name = "git stash show -p"
+trigger = "sw"
+snippet = "show -p stash@{{}}"
+global = true
+context = '^git stash\s'
+
+[[snippets]]
+name = "git tag"
+trigger = "t"
+snippet = "tag"
+global = true
+context = '^git\s'
+
+[[snippets]]
+name = "git tag --list"
+trigger = "l"
+snippet = "--list"
+global = true
+context = '^git tag\s'
+
+[[snippets]]
+name = "gitui"
+trigger = "gu"
+snippet = "gitui"
+if = "(( ${+commands[gitui]} ))"
+
+[[snippets]]
+name = "git-graph"
+trigger = "gg"
+snippet = "git-graph"
+if = "(( ${+commands[git-graph]} ))"

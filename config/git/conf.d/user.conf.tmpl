@@ -1,0 +1,8 @@
+# deploy.sh が二重波括弧で囲んだ変数を置換して user.conf を生成する。user.conf 自体は .gitignore 対象。
+[user]
+	name = {{GIT_USER_NAME}}
+	email = {{GIT_USER_EMAIL}}
+
+# 自分のリポジトリへの HTTPS アクセスを SSH に書き換える
+[url "git@github.com:{{GITHUB_USER}}/"]
+	insteadOf = https://github.com/{{GITHUB_USER}}/

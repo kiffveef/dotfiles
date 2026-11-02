@@ -1,0 +1,35 @@
+# lsd
+[[snippets]]
+name = "ls"
+trigger = "ls"
+snippet = "lsd --group-directories-first -lF"
+if = "(( ${+commands[lsd]} ))"
+
+[[snippets]]
+name = "ls -l"
+trigger = "ll"
+snippet = "lsd --group-directories-first -laF"
+if = "(( ${+commands[lsd]} ))"
+
+# [[snippets]]
+# name = "ls -la"
+# trigger = "la"
+# snippet = "lsd --group-directories-first -laF"
+# if = "(( ${+commands[lsd]} ))"
+
+[[snippets]]
+name = "ls -l --tree"
+trigger = "lt"
+snippet = "lsd --group-directories-first --tree -laF"
+if = "(( ${+commands[lsd]} ))"
+
+# cd
+[[snippets]]
+name = "cd .."
+trigger = ".."
+snippet = "cd ../"
+
+[[snippets]]
+name = "cd ../../"
+trigger = "..."
+snippet = "cd ../../"

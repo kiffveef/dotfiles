@@ -1,0 +1,17 @@
+[tools]
+neovim = "latest"
+gh = "latest"
+ghq = "latest"
+go = "latest"
+node = "26"
+python = "3.13.9"
+ruby = "latest"
+uv = "latest"
+
+[settings]
+idiomatic_version_file_enable_tools = ["ruby", "python"]
+
+[env]
+MISE_NODE_DEFAULT_PACKAGES_FILE = "~/.config/mise/default-npm-packages"
+MISE_PYTHON_DEFAULT_PACKAGES_FILE = "~/.config/mise/default-python-packages"
+MISE_RUBY_DEFAULT_PACKAGES_FILE = "~/.config/mise/default-ruby-gems"
