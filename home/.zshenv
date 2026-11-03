@@ -11,4 +11,7 @@ export XDG_STATE_HOME="$HOME/.local/state"
 
 export ZDOTDIR="$XDG_CONFIG_HOME/zsh"
 
-# ZDOTDIR を変えても、zsh はこの後 $ZDOTDIR/.zshenv を読みにいく
+# zsh は .zshenv を1回しか読まないため、ここで ZDOTDIR を変えても $ZDOTDIR/.zshenv は
+# 自動では読まれない (変更後の ZDOTDIR が効くのは .zprofile / .zshrc 以降)。明示的に読み込む。
+# 子プロセスの zsh は export 済みの ZDOTDIR から直接 $ZDOTDIR/.zshenv を読むので、二重には読まれない
+[[ -r "$ZDOTDIR/.zshenv" ]] && source "$ZDOTDIR/.zshenv"
