@@ -368,7 +368,8 @@ load_plugins {
 // copy_command "xclip -selection clipboard" // x11
 // copy_command "wl-copy"                    // wayland
 // copy_command "pbcopy"                     // osx
-copy_command "clip.exe"
+// clip.exe は入力を CP932 として読むため UTF-8 が化ける。未設定にして OSC 52 (Windows Terminal が対応) を使う
+// copy_command "clip.exe"
 
 // Choose the destination for copied text
 // Allows using the primary selection buffer (on x11/wayland) instead of the system clipboard.
