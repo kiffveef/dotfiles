@@ -87,10 +87,11 @@ https://github.com/marktoda/zj-radar
 - CLI: `packages/cargo.txt` の `zj-radar` (cargo binstall)
 - wasm: `~/.config/zellij/plugins/zj_radar.wasm` は git 管理外。新しいマシンでは以下で再取得する
   ```sh
-  zj-radar setup zellij --download --inject -y   # wasm 取得 + alias + layouts/default.kdl + 権限付与
+  zj-radar setup zellij --download -y            # wasm 取得 + alias + 権限付与 (layout は dotfiles の default.kdl を使うので --inject しない)
   zj-radar setup claude -y                        # Claude Code プラグイン (settings.json に追記される)
   zj-radar setup --check                          # 診断
   ```
-- `layouts/default.kdl` はサイドバー付きレイアウト。tab-bar は無く、タブ一覧はサイドバーが担う
+- `layouts/default.kdl` はサイドバー付きレイアウト。zj-radar 生成時は tab-bar 無し・status-bar 2行だったが、tab-bar を上に戻し status-bar は `size=1` (1行UI) にしている
+  - サイドバーは右配置に変更済み (setup が生成する既定は左)。3つのテンプレートで radar ペインを後ろに置いている。幅は `size=48` (既定 32 は日本語のタスク名が切れる)
 - 更新: `cargo install zj-radar` (binstall) の後 `zj-radar setup zellij --download`。Claude 側は `/plugin update zj-radar-claude@zj-radar`
 - 設定キー(density, glyphs, notify など)は `config.kdl` の `radar` alias に書く。managed マーカー内は setup で上書きされるため、変えるならマーカー外に自前の alias を置く
