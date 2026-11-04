@@ -25,6 +25,7 @@ sheldon
 starship
 zabrze
 zellij
+zj-radar
 
 # --- ファイラ ---
 yazi-fm

@@ -5,3 +5,7 @@ config/git/conf.d/accounts/accounts.list
 
 # 実行時に生成されるもの
 config/zsh/.zcompdump*
+
+# zj-radar が配置するもの (zj-radar setup zellij --download で再取得できる)
+config/zellij/plugins/
+config/zellij/**/*.zj-radar.bak

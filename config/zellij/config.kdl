@@ -230,6 +230,11 @@ plugins {
     configuration location="zellij:configuration"
     plugin-manager location="zellij:plugin-manager"
     about location="zellij:about"
+    // zj-radar: managed plugin alias begin
+    radar location="file:~/.config/zellij/plugins/zj_radar.wasm" {
+        naming "managed"
+    }
+    // zj-radar: managed plugin alias end
 }
 
 // Plugins to load in the background when a new session starts

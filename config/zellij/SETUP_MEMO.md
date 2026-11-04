@@ -78,3 +78,19 @@ mv ~/.cargo/bin/zellij-0.43.1.bak ~/.cargo/bin/zellij
 - Session Resurrection: https://zellij.dev/documentation/session-resurrection.html
 - Issue #4499: https://github.com/zellij-org/zellij/issues/4499
 - Issue #4536: https://github.com/zellij-org/zellij/issues/4536
+
+## zj-radar (エージェント状態サイドバー)
+
+Claude Code などの状態(作業中 / 返事待ち / 完了)を左サイドバーに表示する。
+https://github.com/marktoda/zj-radar
+
+- CLI: `packages/cargo.txt` の `zj-radar` (cargo binstall)
+- wasm: `~/.config/zellij/plugins/zj_radar.wasm` は git 管理外。新しいマシンでは以下で再取得する
+  ```sh
+  zj-radar setup zellij --download --inject -y   # wasm 取得 + alias + layouts/default.kdl + 権限付与
+  zj-radar setup claude -y                        # Claude Code プラグイン (settings.json に追記される)
+  zj-radar setup --check                          # 診断
+  ```
+- `layouts/default.kdl` はサイドバー付きレイアウト。tab-bar は無く、タブ一覧はサイドバーが担う
+- 更新: `cargo install zj-radar` (binstall) の後 `zj-radar setup zellij --download`。Claude 側は `/plugin update zj-radar-claude@zj-radar`
+- 設定キー(density, glyphs, notify など)は `config.kdl` の `radar` alias に書く。managed マーカー内は setup で上書きされるため、変えるならマーカー外に自前の alias を置く
