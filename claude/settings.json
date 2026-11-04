@@ -75,11 +75,22 @@
           }
         ]
       }
+    ],
+    "SessionStart": [
+      {
+        "matcher": "startup|resume",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash .claude/hooks/check-hagi-version.sh"
+          }
+        ]
+      }
     ]
   },
   "enabledPlugins": {
-    "rust-analyzer-lsp@claude-plugins-official": true,
-    "natural-japanese@natural-japanese": true
+    "natural-japanese@natural-japanese": true,
+    "rust-analyzer-lsp@claude-plugins-official": true
   },
   "extraKnownMarketplaces": {
     "kiffveef-plugins": {
