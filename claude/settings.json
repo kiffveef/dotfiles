@@ -63,7 +63,6 @@
       "Bash(wget:*)"
     ]
   },
-  "model": "opus",
   "enableAllProjectMcpServers": false,
   "hooks": {
     "PreToolUse": [
@@ -102,6 +101,6 @@
   "autoUpdatesChannel": "latest",
   "tui": "fullscreen",
   "autoMemoryEnabled": true,
-  "theme": "dark-daltonized",
+  "theme": "auto",
   "preferredNotifChannel": "auto"
 }
