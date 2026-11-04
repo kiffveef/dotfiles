@@ -34,7 +34,7 @@ ssh -T git@github.com
 - 公開鍵を GitHub (Settings → SSH and GPG keys) に登録してから接続テストする
 - 鍵は `~/.ssh/` に置く。別の名前にしたりサブディレクトリに置いたりする場合は、`~/.ssh/config` に `IdentityFile` を書く
 - 初回接続のフィンガープリントは [GitHub 公式](https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/githubs-ssh-key-fingerprints) と照合し、`yes` と省略せずに入力する
-- **deploy 前に済ませること**。deploy 後は `user.conf` の `insteadOf` で自分のリポジトリへの通信が全て SSH になる
+- **deploy 前に済ませること**。deploy 後は GitHub アカウント設定の `insteadOf` で自分のリポジトリへの通信が全て SSH になる
 
 ### 4. clone
 
@@ -53,7 +53,7 @@ make deploy        # = scripts/deploy.sh
 ```
 
 - 何が変わるかは、先に `scripts/deploy.sh --dry-run` で確認できる
-- `GIT_USER_NAME` / `GIT_USER_EMAIL` / `GITHUB_USER` を聞かれる。メールは noreply (`35710205+kiffveef@users.noreply.github.com`) を使う
+- 先に git のアカウント一覧を作っておく。`config/git/conf.d/accounts/accounts.list.example` を同じ場所の `accounts.list` にコピーして編集する。GitHub のメールは noreply (`35710205+kiffveef@users.noreply.github.com`) を使う
 - 既存のファイルは `~/.local/state/dotfiles/backup/<日時>/` に退避される
 - zsh の初回起動で `zsh-newuser-install` が出たら `q` で抜ける (ファイルを作らせない)
 
@@ -119,6 +119,7 @@ make deploy        # リンクの張り直し
 - アプリが symlink を実ファイルに置き換えることがある (`~/.claude/settings.json` など)。`scripts/deploy.sh --dry-run` で `→` が出るものはリンクが外れている
 - 新しく管理したい設定は `links.conf` に1行足して `make deploy`
 - 個人情報を含む設定は `*.tmpl` にして、生成されるファイルを `.gitignore` に書く
+- git のアカウントを増やすときは `accounts.list` に1行足して `make deploy`。新しいサービスなら `accounts/<service>.conf.tmpl` も作る
 
 ## トラブルシューティング
 

@@ -1,0 +1,9 @@
+# deploy.sh が accounts.list の github の行ごとに描画する。生成物は .gitignore 対象。
+# 変数: NAME (GitHub のユーザー名), EMAIL
+[user]
+	name = {{NAME}}
+	email = {{EMAIL}}
+
+# 自分のリポジトリへの HTTPS アクセスを SSH に書き換える
+[url "git@github.com:{{NAME}}/"]
+	insteadOf = https://github.com/{{NAME}}/

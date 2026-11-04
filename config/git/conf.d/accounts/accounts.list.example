@@ -1,0 +1,11 @@
+# git のアカウント一覧の見本。accounts.list にコピーして編集する (accounts.list は .gitignore 対象)。
+#
+# 書式: <service> <name> [KEY=VALUE ...]
+#   - <service>.conf.tmpl を描画して <service>-<name>.conf を生成する
+#   - テンプレートの {{NAME}} は <name> に、ほかの {{KEY}} は同じ行の KEY=VALUE の値に置換される
+#   - GITDIR を書くと、そのディレクトリ配下のリポジトリでだけ有効になる
+#     GITDIR の無いアカウントは既定として常に読み込まれる (1つまで)
+#   - 値に空白は使えない
+
+github   <user>     EMAIL=<id>+<user>@users.noreply.github.com
+tangled  <handle>   GITDIR=~/workspace/tangled.org/<handle>  DID=did:plc:<id>  SSH_HOST=tangled.org

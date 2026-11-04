@@ -1,5 +1,7 @@
 # テンプレートから生成されるファイル (個人情報を含む)
 config/git/conf.d/user.conf
+config/git/conf.d/accounts/*.conf
+config/git/conf.d/accounts/accounts.list
 
 # 実行時に生成されるもの
 config/zsh/.zcompdump*

@@ -1,0 +1,10 @@
+# deploy.sh が accounts.list の tangled の行ごとに描画する。生成物は .gitignore 対象。
+# 変数: NAME (ハンドル), DID, SSH_HOST (ssh_config の Host。アカウントごとに鍵を分けるため)
+[user]
+	name = {{NAME}}
+	# tangled はメールアドレスではなく DID でコミットをアカウントに紐づける
+	email = {{DID}}
+
+# 自分のリポジトリへの HTTPS アクセスを SSH に書き換える
+[url "git@{{SSH_HOST}}:{{NAME}}/"]
+	insteadOf = https://tangled.org/{{NAME}}/
