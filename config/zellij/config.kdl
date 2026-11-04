@@ -239,8 +239,10 @@ plugins {
 
 // Plugins to load in the background when a new session starts
 load_plugins {
-  // "file:/path/to/my-plugin.wasm"
-  // "https://example.com/my-plugin.wasm"
+    // ファイルパスをホバーで強調し、Alt+クリックで $EDITOR のフローティングペインで開く (zellij0.44+)
+    "zellij:link"
+    // "file:/path/to/my-plugin.wasm"
+    // "https://example.com/my-plugin.wasm"
 }
 
 // Choose what to do when zellij receives SIGTERM, SIGINT, SIGQUIT or SIGHUP
