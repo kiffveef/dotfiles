@@ -175,6 +175,8 @@ keybinds {
         // 参考: https://github.com/zellij-org/zellij/issues/4499
         bind "Ctrl q" { Detach; }
         bind "Alt f" { ToggleFloatingPanes; }
+        // zj-radarのサイドバーを一時的に隠す(同じキーで戻る)
+        bind "Alt z" { ToggleFocusFullscreen; }
         bind "Alt n" { NewPane; }
         bind "Alt i" { MoveTab "Left"; }
         bind "Alt o" { MoveTab "Right"; }
