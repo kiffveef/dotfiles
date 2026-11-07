@@ -84,6 +84,8 @@ mv ~/.cargo/bin/zellij-0.43.1.bak ~/.cargo/bin/zellij
 Claude Code などの状態(作業中 / 返事待ち / 完了)を左サイドバーに表示する。
 https://github.com/marktoda/zj-radar
 
+自作ツール (muyu など) から状態を通知する方法は `ZJ_RADAR_PRODUCER.md` を参照。
+
 - CLI: `packages/cargo.txt` の `zj-radar` (cargo binstall)
 - wasm: `~/.config/zellij/plugins/zj_radar.wasm` は git 管理外。新しいマシンでは以下で再取得する
   ```sh
