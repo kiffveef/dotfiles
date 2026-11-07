@@ -32,22 +32,22 @@
 ```
 ✨ Add user authentication feature
 
-- JWT トークンベースの認証を実装
+- JWTトークンベースの認証を実装
 - ログイン/ログアウトエンドポイントを追加
-- Redis によるセッション管理を導入
+- Redisによるセッション管理を導入
 ```
 
 ```
 🐛 Fix session error on login
 
-- Redis 接続タイムアウトを 5 秒に設定
+- Redis接続タイムアウトを5秒に設定
 - セッション保存時のエラーハンドリングを追加
 ```
 
 ```
 🔄 Update API response format
 
-- レスポンスに meta フィールドを追加
+- レスポンスにmetaフィールドを追加
 - エラーメッセージの形式を統一
 ```
 
