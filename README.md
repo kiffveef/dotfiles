@@ -107,6 +107,20 @@ gh auth login
 - hisho-cli: hisho を ghq get してから `cargo install --path <hisho>/crates/hisho-cli`
 - Docker: `make docker`。docker グループへの追加は再ログイン後に有効
 
+### 10. Neovim の初回起動
+
+- Neovim は mise で 0.12 系に固定して入る (`config/mise/config.toml` の `neovim = "0.12"`)。設定は `config/nvim` が `~/.config/nvim` にリンクされる
+- プラグイン管理は mini.nvim の mini.deps。初回起動時に `init.lua` が mini.nvim を自動 clone し、他のプラグインも起動中に順次 clone される (ネットワークが必要)
+- バージョンはスナップショット `config/nvim/mini-deps-snap` に固定している。自動では適用されないので、初回起動のあと `:DepsSnapLoad` を実行してスナップショットの版に揃える
+- プラグインを更新するときは `:DepsUpdate` のあと `:DepsSnapSave` でスナップショットを書き換えてコミットする
+- treesitter のパーサ (24言語) は初回起動時に非同期でコンパイルされる。tree-sitter CLI は mise で入り、C コンパイラは事前準備の build-essential を使う。コンパイル前に開いていたバッファはハイライトが付かないので、開き直す
+- LSP サーバ (lua_ls, ruby_lsp, dockerls, docker_compose_language_service, ts_ls, eslint, cssls, html, rust_analyzer の9個) は mason が初回起動時に自動インストールする。進捗は `:Mason` で見る。node / ruby は mise のものが使われる
+- ruby_lsp は Ruby プロジェクトを初めて開いたときに gem を自動インストールする
+- Windows 側に置くもの:
+  - `win32yank.exe`: クリップボード連携に必須。`winget install equalsraf.win32yank` で入り、PATH も winget が通す
+  - `zenhan.exe` または `im-select.exe`: ノーマルモードに戻ったときに IME を切るために使う。任意で、無ければ警告なしで無効になる。Windows のユーザー PATH が通ったフォルダに置く (PATH の変更は WezTerm を再起動するまで WSL に反映されない)
+- `Space ?` でキーマップのチートシート (`config/nvim/cheatsheet.md`) が開く
+
 ## 日常の操作
 
 ```bash
@@ -141,4 +155,5 @@ sudo systemctl start user@1000.service
 ### zellij でコピーした文字が化ける (`❯` → `笶ｯ`)
 
 - `copy_command "clip.exe"` が原因。clip.exe は入力をコンソールのコードページ (CP932) として読むため UTF-8 が化ける
-- `config/zellij/config.kdl` の `copy_command` を消すと OSC52 (Windows Terminal が対応) でコピーされ、化けなくなる
+- `config/zellij/config.kdl` の `copy_command` を消すと OSC52 (WezTerm / Windows Terminal が対応) でコピーされ、化けなくなる
+
