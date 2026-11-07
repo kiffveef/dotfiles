@@ -210,6 +210,36 @@ vim.keymap.set("n", "<Leader>tp", "<Cmd>FloatermPrev<CR>", { silent = true, desc
 vim.keymap.set("n", "<Leader>tn", "<Cmd>FloatermNext<CR>", { silent = true, desc = "Next Floaterm" })
 
 -- ========================================
+-- チートシート
+-- ========================================
+
+-- 元ファイルを誤って書き換えないよう、内容を読み込んだ使い捨てバッファで表示する
+local function open_cheatsheet()
+  local buf = vim.api.nvim_create_buf(false, true)
+  vim.api.nvim_buf_set_lines(buf, 0, -1, false, vim.fn.readfile(vim.fn.stdpath("config") .. "/cheatsheet.md"))
+  vim.bo[buf].modifiable = false
+  vim.bo[buf].bufhidden = "wipe"
+  vim.bo[buf].filetype = "markdown"
+  local width = math.floor(vim.o.columns * 0.8)
+  local height = math.floor(vim.o.lines * 0.8)
+  vim.api.nvim_open_win(buf, true, {
+    relative = "editor",
+    width = width,
+    height = height,
+    row = math.floor((vim.o.lines - height) / 2),
+    col = math.floor((vim.o.columns - width) / 2),
+    style = "minimal",
+    border = "rounded",
+    title = " Cheatsheet ",
+    title_pos = "center",
+  })
+  vim.keymap.set("n", "q", "<Cmd>close<CR>", { buffer = buf, nowait = true, desc = "Close cheatsheet" })
+  vim.keymap.set("n", "<Esc>", "<Cmd>close<CR>", { buffer = buf, nowait = true, desc = "Close cheatsheet" })
+end
+
+vim.keymap.set("n", "<Leader>?", open_cheatsheet, { desc = "Cheatsheet" })
+
+-- ========================================
 -- ユーザーコマンド
 -- ========================================
 
