@@ -78,6 +78,7 @@ local ts_languages = {
   "zsh",
   "make",
   "kdl",
+  "rust",
 }
 
 -- laterだと引数で開いたファイルのFileTypeに間に合わず、最初の描画がハイライトなしになる
@@ -140,6 +141,7 @@ local lsp_servers = {
   "eslint",
   "cssls",
   "html",
+  "rust_analyzer",
 }
 
 local ts_inlay_hints = {
