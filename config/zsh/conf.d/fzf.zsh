@@ -1,4 +1,5 @@
-export FZF_DEFAULT_OPTS="--ansi -e --prompt='QUERY> ' --layout=reverse --border=rounded --height=50%"
+# Ctrl-y bind lives here because enhancd splits ENHANCD_FILTER on colons
+export FZF_DEFAULT_OPTS="--ansi -e --prompt='QUERY> ' --layout=reverse --border=rounded --height=50% --bind 'ctrl-y:execute-silent(printf %s {} | win32yank.exe -i)+abort'"
 export FZF_DEFAULT_COMMAND="fd -H -E .git --color=always"
 
 export FZF_CTRL_T_OPTS="--preview 'bat  --color=always --style=header,grid {}' --preview-window=right:60%"
@@ -10,9 +11,11 @@ export FZF_CTRL_R_OPTS="--preview 'echo {}' --preview-window down:3:hidden:wrap 
 function _fzf_cd_ghq() {
     # FZF_DEFAULT_OPTS="${FZF_DEFAULT_OPTS} --reverse --height=50%"
     local root="$(ghq root)"
-    local repo="$(ghq list | fzf --preview="lsd -1F --group-directories-first ${root}/{1}")"
+    # ghq list prints paths relative to ghq root, so Ctrl-y must prepend it
+    local repo="$(ghq list | fzf --preview="lsd -1F --group-directories-first ${root}/{1}" \
+        --bind="ctrl-y:execute-silent(printf %s ${root}/{} | win32yank.exe -i)+abort")"
     local dir="${root}/${repo}"
-    [ -n "${dir}" ] && cd "${dir}"
+    [ -n "${repo}" ] && cd "${dir}"
     zle accept-line
     zle reset-prompt
 }
