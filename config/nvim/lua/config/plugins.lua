@@ -51,6 +51,47 @@ now(function()
 end)
 
 -- ========================================
+-- ライトテーマ(loglineプロジェクトのmarkdown)
+-- ========================================
+
+later(function()
+  add({ source = "folke/tokyonight.nvim" })
+
+  -- tokyonight.load()やcolorschemeはグローバルの配色を変えるため、色とグループだけ作って専用のnamespaceに入れる
+  local opts = require("tokyonight.config").extend({ style = "day" })
+  local colors = require("tokyonight.colors").setup(opts)
+  local groups = require("tokyonight.groups").setup(colors, opts)
+  local ns = vim.api.nvim_create_namespace("config_light_markdown")
+  for group, hl in pairs(groups) do
+    -- tokyonight側のtheme.luaと同じく、文字列はリンク先のグループ名として扱う
+    hl = type(hl) == "string" and { link = hl } or hl
+    vim.api.nvim_set_hl(ns, group, hl)
+  end
+
+  local function is_light_target(buf)
+    return vim.bo[buf].filetype == "markdown" and vim.fs.root(buf, ".logline") ~= nil
+  end
+
+  local function apply(win)
+    local buf = vim.api.nvim_win_get_buf(win)
+    vim.api.nvim_win_set_hl_ns(win, is_light_target(buf) and ns or 0)
+  end
+
+  vim.api.nvim_create_autocmd({ "BufWinEnter", "FileType" }, {
+    group = vim.api.nvim_create_augroup("config_light_markdown", { clear = true }),
+    pattern = "*",
+    callback = function()
+      apply(vim.api.nvim_get_current_win())
+    end,
+  })
+
+  -- laterより前に引数で開いたバッファは上のautocmdを通らないため、既存ウィンドウにも一度適用する
+  for _, win in ipairs(vim.api.nvim_list_wins()) do
+    apply(win)
+  end
+end)
+
+-- ========================================
 -- treesitter
 -- ========================================
 

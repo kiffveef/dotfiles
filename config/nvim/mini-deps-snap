@@ -8,6 +8,7 @@ return {
   ["nvim-lspconfig"] = "adfbb74472f6c231b651b650a89f414c2680fb31",
   ["nvim-treesitter"] = "0195cd62fa89950f34c0e0d648ea7897ab85d4d3",
   ["nvim-treesitter-textobjects"] = "5c7b0263797dfd1bd6202f2b219f3b53a80b2187",
+  ["tokyonight.nvim"] = "cdc07ac78467a233fd62c493de29a17e0cf2b2b6",
   ["vim-floaterm"] = "7712701c5d20a0f9c935fbc2a6334083ce89b558",
   ["yanky.nvim"] = "edcbe0f6d693b9e7860626094f886a2d79cfe63b"
 }
