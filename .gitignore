@@ -9,3 +9,7 @@ config/zsh/.zcompdump*
 # zj-radar が配置するもの (zj-radar setup zellij --download で再取得できる)
 config/zellij/plugins/
 config/zellij/**/*.zj-radar.bak
+
+/.claude/
+/.mcp.json
+/.serena/
