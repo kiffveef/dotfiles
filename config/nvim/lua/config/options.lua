@@ -3,21 +3,14 @@
 -- ========================================
 
 local options = {
-  encoding = "utf-8",
-  fileencoding = "utf-8",
   title = true,
-  backup = false,
   swapfile = false,
   undofile = true,
   updatetime = 500,
   timeoutlen = 300,
-  lazyredraw = true,
-  redrawtime = 10000,
   writebackup = false,
-  backupskip = { "/tmp/*", "/private/tmp/*" },
   clipboard = "unnamedplus",
   mouse = "a",
-  showtabline = 0,
   smartcase = true,
   ignorecase = true,
   number = true,
@@ -27,10 +20,10 @@ local options = {
   softtabstop = 2,
   tabstop = 2,
   cursorline = true,
-  relativenumber = false,
   signcolumn = "yes",
-  scrolloff = 10,
+  scrolloff = 20,
   whichwrap = "b,s,h,l,<,>,[,],~",
+  -- 既定値と同じだがmini.basicsがnowrapにするため明示する
   wrap = true,
   linebreak = true,
   breakindent = true,
@@ -50,6 +43,7 @@ vim.opt.shortmess:append("aAIFOtTc")
 
 -- コメント行で改行してもコメントを継続しない
 vim.api.nvim_create_autocmd("FileType", {
+  group = vim.api.nvim_create_augroup("config_formatoptions", { clear = true }),
   pattern = "*",
   callback = function()
     vim.opt_local.formatoptions:remove({ "c", "r", "o" })
@@ -60,16 +54,30 @@ vim.api.nvim_create_autocmd("FileType", {
 -- Windows clipboard integration
 -- ========================================
 
-local win32yank = vim.fn.expand("~/workspace/bin/win32yank.exe")
-vim.g.clipboard = {
-  name = "win32yank",
-  copy = {
-    ["+"] = win32yank .. " -i --crlf",
-    ["*"] = win32yank .. " -i --crlf",
-  },
-  paste = {
-    ["+"] = win32yank .. " -o --lf",
-    ["*"] = win32yank .. " -o --lf",
-  },
-  cache_enabled = 0,
-}
+-- executable()はWSLのPATH(/mnt/c配下)を走査して起動が約40ms遅れるため、WSL判定だけで決める
+if vim.fn.has("wsl") == 1 then
+  vim.g.clipboard = {
+    name = "win32yank",
+    copy = {
+      ["+"] = "win32yank.exe -i --crlf",
+      ["*"] = "win32yank.exe -i --crlf",
+    },
+    paste = {
+      ["+"] = "win32yank.exe -o --lf",
+      ["*"] = "win32yank.exe -o --lf",
+    },
+    cache_enabled = 0,
+  }
+
+  -- 既定のexplorer.exeはURLを開いても終了コード1を返しgXがエラー通知するため、rundll32で開く
+  -- 保存時リロードで二重に包まないようフラグで一度だけ差し替える
+  if not vim.g.config_ui_open_wrapped then
+    vim.g.config_ui_open_wrapped = true
+    local ui_open = vim.ui.open
+    vim.ui.open = function(path, opt)
+      opt = opt or {}
+      opt.cmd = opt.cmd or { "rundll32.exe", "url.dll,FileProtocolHandler" }
+      return ui_open(path, opt)
+    end
+  end
+end

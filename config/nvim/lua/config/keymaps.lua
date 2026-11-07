@@ -1,35 +1,31 @@
 -- ========================================
--- キーマップ設定 (mini.clue統合版)
+-- キーマップ設定
 -- ========================================
+
+-- 保存時にdofileで再実行されるため、ここには上書きで済む定義だけを置く
+-- (jk/jj/kjのcomboは再登録すると重複するのでmini.luaに置いている)
+-- mini.*はlater()で読み込まれるため、Mini*グローバルは実行時に参照する
 
 -- ========================================
 -- 基本キーマップ
 -- ========================================
 
--- ; と : を入れ替え
+-- Shiftなしでコマンドラインに入るため
 vim.keymap.set("n", ";", ":", { desc = "Command mode" })
 
--- 検索ハイライトOFF
 vim.keymap.set("n", "<Esc><Esc>", "<Cmd>nohlsearch<CR>", { desc = "Clear search highlight" })
 
--- インサートモード離脱
-vim.keymap.set("i", "jk", "<Esc>", { desc = "Exit insert mode" })
-vim.keymap.set("i", "jj", "<Esc>", { desc = "Exit insert mode" })
-vim.keymap.set("i", "kj", "<Esc>", { desc = "Exit insert mode" })
-
--- <C-c> でインサートモードを抜けて保存
 vim.keymap.set("i", "<C-c>", "<Esc><Cmd>w<CR>", { desc = "Exit and save" })
 
--- スペース挿入
 vim.keymap.set("i", ",", ",<Space>", { desc = "Comma with space" })
 
--- インサートモード中のカーソル移動
+-- 矢印キーまで手を動かさずに済むようにする
 vim.keymap.set("i", "<C-k>", "<Up>", { desc = "Move up" })
 vim.keymap.set("i", "<C-j>", "<Down>", { desc = "Move down" })
 vim.keymap.set("i", "<C-l>", "<Right>", { desc = "Move right" })
 vim.keymap.set("i", "<C-h>", "<Left>", { desc = "Move left" })
 
--- コマンドライン補完
+-- 補完メニュー表示中は候補選択、それ以外は履歴移動にする
 vim.keymap.set("c", "<C-n>", function()
   return vim.fn.wildmenumode() == 1 and "<C-n>" or "<Down>"
 end, { expr = true, desc = "Select next completion item" })
@@ -42,22 +38,14 @@ end, { expr = true, desc = "Select previous completion item" })
 -- バッファ操作
 -- ========================================
 
--- バッファ移動
-vim.keymap.set("n", "<Tab>", function()
-  if vim.bo.filetype == "logline-sidebar" then
-    return
-  end
-  vim.cmd("bnext")
-end, { desc = "Next buffer" })
+vim.keymap.set("n", "<Tab>", "<Cmd>bnext<CR>", { desc = "Next buffer" })
 vim.keymap.set("n", "<S-Tab>", "<Cmd>bprevious<CR>", { desc = "Previous buffer" })
 vim.keymap.set("n", "<Leader>bn", "<Cmd>bnext<CR>", { desc = "Next buffer" })
 vim.keymap.set("n", "<Leader>bp", "<Cmd>bprevious<CR>", { desc = "Previous buffer" })
 
--- バッファを閉じる（ウィンドウは維持）
 vim.keymap.set("n", "<Leader>bd", "<Cmd>bdelete<CR>", { desc = "Delete buffer" })
 vim.keymap.set("n", "<Leader>bx", "<Cmd>bdelete!<CR>", { desc = "Force delete buffer" })
 
--- 他のバッファをすべて閉じる
 vim.keymap.set("n", "<Leader>bo", function()
   local current = vim.api.nvim_get_current_buf()
   for _, buf in ipairs(vim.api.nvim_list_bufs()) do
@@ -67,116 +55,153 @@ vim.keymap.set("n", "<Leader>bo", function()
   end
 end, { desc = "Close other buffers" })
 
--- バッファ/ウィンドウを閉じる
-vim.keymap.set('n', '<Leader>q', function()
+vim.keymap.set("n", "<Leader>q", function()
   local cur_win = vim.api.nvim_get_current_win()
   local cur_buf = vim.api.nvim_get_current_buf()
-  if vim.bo[cur_buf].filetype == 'help' then
-    vim.cmd('q')
+  if vim.bo[cur_buf].filetype == "help" then
+    vim.cmd("q")
     return
   end
   local buf_count = 0
   for _, buf in ipairs(vim.api.nvim_list_bufs()) do
-    if vim.api.nvim_buf_is_loaded(buf) and vim.bo[buf].buftype == '' then
+    if vim.api.nvim_buf_is_loaded(buf) and vim.bo[buf].buftype == "" then
       buf_count = buf_count + 1
     end
   end
+  -- 最後のバッファを消すと空バッファが残るだけなので、Neovimごと終了する
   if buf_count <= 1 then
-    vim.cmd('qa!')
+    vim.cmd("qa!")
     return
   end
-  pcall(vim.cmd, 'bd!')
+  pcall(vim.cmd, "bd!")
   if vim.api.nvim_win_is_valid(cur_win) then
     pcall(vim.api.nvim_win_close, cur_win, true)
   end
 end, { desc = "Quit current tab or window" })
 
 -- ========================================
--- Telescope関連
+-- 検索(mini.pick / mini.extra)
 -- ========================================
 
-local has_telescope, builtin = pcall(require, "telescope.builtin")
-local has_theme, telescope_theme = pcall(require, "plugins.telescope_theme")
+-- dotfilesでは隠しファイルやgitignore対象も開きたいため、Pick filesではなくrgを直接指定する
+vim.keymap.set("n", "<Leader>ff", function()
+  MiniPick.builtin.cli({
+    command = { "rg", "--files", "--color=never", "--hidden", "--no-ignore-vcs", "--glob", "!**/.git/" },
+  }, {
+    source = {
+      name = "Files (rg)",
+      -- cliは既定でアイコンを出さないため、Pick filesと同じ表示にする
+      show = function(buf_id, items, query)
+        MiniPick.default_show(buf_id, items, query, { show_icons = true })
+      end,
+    },
+  })
+end, { desc = "Search Files" })
+vim.keymap.set("n", "<Leader>fg", "<Cmd>Pick grep_live<CR>", { desc = "Search by Grep" })
+vim.keymap.set("n", "<Leader>fb", "<Cmd>Pick buffers<CR>", { desc = "Find existing buffers" })
+vim.keymap.set("n", "<Leader>f/", "<Cmd>Pick buf_lines scope='current'<CR>", { desc = "Fuzzy find in current buffer" })
+vim.keymap.set("n", "<Leader>fd", "<Cmd>Pick diagnostic<CR>", { desc = "Search Diagnostics" })
+vim.keymap.set("n", "<Leader>fr", "<Cmd>Pick registers<CR>", { desc = "Search Registers" })
+vim.keymap.set("n", "<Leader>fh", "<Cmd>Pick oldfiles<CR>", { desc = "Recent Files" })
 
-if has_telescope then
-  vim.keymap.set("n", "<Leader>ff", builtin.find_files, { desc = "Search Files" })
-  vim.keymap.set("n", "<Leader>fg", builtin.live_grep, { desc = "Search by Grep" })
-  vim.keymap.set("n", "<Leader>fb", builtin.buffers, { desc = "Find existing buffers" })
-  vim.keymap.set("n", "<Leader>f/", builtin.current_buffer_fuzzy_find, { desc = "Fuzzy find in current buffer" })
-  vim.keymap.set("n", "<Leader>fd", builtin.diagnostics, { desc = "Search Diagnostics" })
-  vim.keymap.set("n", "<Leader>fr", builtin.registers, { desc = "Search Registers" })
-  vim.keymap.set("n", "<Leader>fh", builtin.oldfiles, { desc = "Recent Files" })
+vim.keymap.set("n", "<Leader>fw", function()
+  MiniFiles.open(vim.fn.expand("%:p:h"))
+end, { desc = "File browser" })
 
-  -- File browser
-  vim.keymap.set("n", "<Leader>fw", function()
-    local telescope_ex = require("telescope").extensions.file_browser
-    telescope_ex.file_browser({
-      path = "%:p:h",
-      cwd = vim.fn.expand("%:p:h"),
-    })
-  end, { desc = "File browser" })
+-- :Pickは引数をexpandcmd()で展開するので'%'が現在のファイルになる
+vim.keymap.set("n", "<Leader>gb", "<Cmd>Pick git_commits path='%'<CR>", { desc = "Git log (current file)" })
+vim.keymap.set("n", "<Leader>gl", "<Cmd>Pick git_commits<CR>", { desc = "Git log (all commits)" })
 
-  -- Git
-  if has_theme then
-    vim.keymap.set("n", "<Leader>gb", function()
-      builtin.git_bcommits(telescope_theme.get_theme_with_height(telescope_theme.git.height))
-    end, { desc = "Git blame (file commits)" })
+vim.keymap.set("n", "<Leader>un", function()
+  MiniNotify.show_history()
+end, { desc = "Notification history" })
 
-    vim.keymap.set("n", "<Leader>gl", function()
-      builtin.git_commits(telescope_theme.get_theme_with_height(telescope_theme.git.height))
-    end, { desc = "Git log (all commits)" })
+-- ========================================
+-- LSP
+-- ========================================
+
+-- 組み込みのgr*はmini.operatorsのgrと重なるため、<Leader>lにまとめる
+vim.keymap.set("n", "<Leader>ld", "<Cmd>Pick lsp scope='definition'<CR>", { desc = "Go to definition" })
+vim.keymap.set("n", "<Leader>lr", "<Cmd>Pick lsp scope='references'<CR>", { desc = "References" })
+vim.keymap.set("n", "<Leader>li", "<Cmd>Pick lsp scope='implementation'<CR>", { desc = "Implementation" })
+vim.keymap.set("n", "<Leader>lt", "<Cmd>Pick lsp scope='type_definition'<CR>", { desc = "Type definition" })
+vim.keymap.set("n", "<Leader>lo", "<Cmd>Pick lsp scope='document_symbol'<CR>", { desc = "Document Symbols" })
+vim.keymap.set("n", "<Leader>lw", "<Cmd>Pick lsp scope='workspace_symbol'<CR>", { desc = "Workspace Symbols" })
+vim.keymap.set("n", "<Leader>ln", vim.lsp.buf.rename, { desc = "Rename" })
+vim.keymap.set({ "n", "x" }, "<Leader>la", vim.lsp.buf.code_action, { desc = "Code action" })
+vim.keymap.set("n", "<Leader>lf", vim.lsp.buf.format, { desc = "Format" })
+vim.keymap.set("n", "<Leader>lh", function()
+  vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled({ bufnr = 0 }), { bufnr = 0 })
+end, { desc = "Toggle inlay hints" })
+
+-- ========================================
+-- ヤンク履歴(yanky.nvim)
+-- ========================================
+
+vim.keymap.set({ "n", "x" }, "y", "<Plug>(YankyYank)")
+vim.keymap.set({ "n", "x" }, "p", "<Plug>(YankyPutAfter)")
+vim.keymap.set({ "n", "x" }, "P", "<Plug>(YankyPutBefore)")
+-- vim.ui.selectはmini.pickに差し替わっているので、履歴もmini.pickで選べる
+vim.keymap.set("n", "<Leader>p", "<Cmd>YankyRingHistory<CR>", { desc = "Yank History" })
+
+-- ========================================
+-- 日本語の文節単位移動(budouxify.nvim)
+-- ========================================
+
+-- find_*は移動先を返すだけなので、カーソルは自分で動かす
+local function budoux_jump(find, head)
+  return function()
+    local pos = require("budouxify.motion")[find]({ head = head })
+    if pos then
+      vim.api.nvim_win_set_cursor(0, { pos.row, pos.col })
+    end
   end
 end
 
--- ========================================
--- LSP関連
--- ========================================
-
-if has_telescope and has_theme then
-  local ivy_theme = telescope_theme.themes and telescope_theme.get_theme_with_height(telescope_theme.height.height) or {}
-  vim.keymap.set("n", "<Leader>lo", function()
-    builtin.lsp_document_symbols(ivy_theme)
-  end, { desc = "Document Symbols" })
-
-  vim.keymap.set("n", "<Leader>lw", function()
-    builtin.lsp_workspace_symbols(ivy_theme)
-  end, { desc = "Workspace Symbols" })
-
-  vim.keymap.set("n", "<Leader>ld", function()
-    builtin.lsp_definitions(ivy_theme)
-  end, { desc = "Go to definition" })
-else
-  vim.keymap.set("n", "<Leader>lo", vim.lsp.buf.document_symbol, { desc = "Document Symbols" })
-  vim.keymap.set("n", "<Leader>lw", vim.lsp.buf.workspace_symbol, { desc = "Workspace Symbols" })
-  vim.keymap.set("n", "<Leader>ld", vim.lsp.buf.definition, { desc = "Go to definition" })
-end
+vim.keymap.set({ "n", "x" }, "W", budoux_jump("find_forward", true), { desc = "BudouX: Next word head" })
+vim.keymap.set({ "n", "x" }, "E", budoux_jump("find_forward", false), { desc = "BudouX: Next word end" })
+vim.keymap.set({ "n", "x" }, "B", budoux_jump("find_backward", true), { desc = "BudouX: Previous word head" })
 
 -- ========================================
--- Yanky関連
+-- ファイラー(yazi)
 -- ========================================
 
-local has_yanky = pcall(require, "yanky")
-if has_yanky then
-  vim.keymap.set("n", "<Leader>p", function()
-    require("telescope").extensions.yank_history.yank_history({})
-  end, { desc = "Yank History" })
-
-  vim.keymap.set({ "n", "x" }, "y", "<Plug>(YankyYank)")
-  vim.keymap.set({ "n", "x" }, "p", "<Plug>(YankyPutAfter)")
-  vim.keymap.set({ "n", "x" }, "P", "<Plug>(YankyPutBefore)")
-end
+-- yaziで選んだファイルをこのNeovimで開くため、選択結果を--chooser-fileで受け取る
+vim.keymap.set("n", "<Leader>yf", function()
+  local dir = vim.fn.expand("%:p:h")
+  local chooser = vim.fn.tempname()
+  local width = math.floor(vim.o.columns * 0.8)
+  local height = math.floor(vim.o.lines * 0.8)
+  local buf = vim.api.nvim_create_buf(false, true)
+  vim.api.nvim_open_win(buf, true, {
+    relative = "editor",
+    width = width,
+    height = height,
+    row = math.floor((vim.o.lines - height) / 2),
+    col = math.floor((vim.o.columns - width) / 2),
+    style = "minimal",
+    border = "rounded",
+  })
+  vim.fn.jobstart({ "yazi", "--chooser-file", chooser, dir }, {
+    term = true,
+    on_exit = function()
+      -- バッファを消せばそれを表示するフロートも閉じるため、ウィンドウは別に閉じない
+      vim.api.nvim_buf_delete(buf, { force = true })
+      -- ファイルを選ばずに終了するとchooserは作られない
+      if vim.fn.filereadable(chooser) == 0 then
+        return
+      end
+      for _, file in ipairs(vim.fn.readfile(chooser)) do
+        vim.cmd.edit(vim.fn.fnameescape(file))
+      end
+      vim.fn.delete(chooser)
+    end,
+  })
+  vim.cmd.startinsert()
+end, { desc = "Yazi file manager", silent = true })
 
 -- ========================================
--- Yazi関連
--- ========================================
-
-local has_yazi, yazi_module = pcall(require, "plugins.yazi")
-if has_yazi and yazi_module.open_yazi then
-  vim.keymap.set("n", "<Leader>yf", yazi_module.open_yazi, { desc = "Yazi file manager", silent = true })
-end
-
--- ========================================
--- Floaterm関連
+-- フローティングターミナル(vim-floaterm)
 -- ========================================
 
 vim.keymap.set("n", "<Leader>tt", "<Cmd>FloatermToggle<CR>", { silent = true, desc = "Toggle Floaterm" })
@@ -185,43 +210,10 @@ vim.keymap.set("n", "<Leader>tp", "<Cmd>FloatermPrev<CR>", { silent = true, desc
 vim.keymap.set("n", "<Leader>tn", "<Cmd>FloatermNext<CR>", { silent = true, desc = "Next Floaterm" })
 
 -- ========================================
--- Memo関連
+-- ユーザーコマンド
 -- ========================================
 
-vim.keymap.set("n", "<Leader>mn", "<Cmd>MemoNew<CR>", { silent = true, desc = "New memo" })
-vim.keymap.set("n", "<Leader>ml", "<Cmd>MemoList<CR>", { silent = true, desc = "Memo list" })
-vim.keymap.set("n", "<Leader>mg", "<Cmd>MemoGrep<CR>", { silent = true, desc = "Memo grep" })
-
--- ========================================
--- Notify関連
--- ========================================
-
-vim.keymap.set("n", "<Leader>un", function()
-  require("telescope").extensions.notify.notify(
-    require("telescope.themes").get_ivy({
-      layout_config = { height = 0.4 },
-      attach_mappings = function(_, map)
-        local actions = require("telescope.actions")
-        -- Enterキーで選択してもポップアップを再表示しない(デフォルト動作を無効化)
-        map("i", "<CR>", actions.close)
-        map("n", "<CR>", actions.close)
-        -- Ctrl+yでクリップボードにコピー(ポップアップは開いたまま)
-        map("i", "<C-y>", function()
-          local entry = require("telescope.actions.state").get_selected_entry()
-          if entry and entry.value then
-            local msg = type(entry.value) == "table" and entry.value.message or tostring(entry.value)
-            vim.fn.setreg("+", msg)
-          end
-        end)
-        map("n", "<C-y>", function()
-          local entry = require("telescope.actions.state").get_selected_entry()
-          if entry and entry.value then
-            local msg = type(entry.value) == "table" and entry.value.message or tostring(entry.value)
-            vim.fn.setreg("+", msg)
-          end
-        end)
-        return true
-      end,
-    })
-  )
-end, { desc = "Notification history" })
+-- 再実行時に既存定義があってもエラーにしないためforceを付ける
+vim.api.nvim_create_user_command("InitLua", function()
+  vim.cmd.edit(vim.fn.stdpath("config") .. "/init.lua")
+end, { force = true, desc = "Edit init.lua" })

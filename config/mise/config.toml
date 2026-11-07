@@ -1,11 +1,12 @@
 [tools]
-neovim = "latest"
+neovim = "0.12"
 gh = "latest"
 ghq = "latest"
 go = "latest"
 node = "26"
 python = "3.13.9"
 ruby = "latest"
+tree-sitter = "latest"
 uv = "latest"
 
 [settings]

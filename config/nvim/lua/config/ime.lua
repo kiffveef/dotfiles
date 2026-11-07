@@ -1,91 +1,72 @@
--- IME auto control configuration
+-- ========================================
+-- IME自動制御(WSLからWindowsのIMEをオフにする)
+-- ========================================
 
-local M = {}
+-- im-selectは環境によって通るIDが違うため、順に全部試す
+local im_select_ids = {
+  -- US keyboard
+  "0x04090409",
+  -- Japanese keyboard - Alphanumeric mode
+  "0x04110411",
+  -- English (United States)
+  "1033",
+}
 
--- IME control command path
-local ime_cmd = nil
-
--- Detect available IME control tool
-local function detect_ime_tool()
-  -- Check for zenhan first (more reliable for Windows IME)
-  local zenhan_paths = {
-    vim.fn.expand("~/workspace/bin/zenhan.exe"),
-    vim.fn.expand("~/bin/zenhan.exe"),
-    "/mnt/c/Windows/System32/zenhan.exe",
-  }
-
-  for _, path in ipairs(zenhan_paths) do
-    if vim.fn.executable(path) == 1 then
-      return { cmd = path, type = "zenhan" }
-    end
-  end
-
-  -- Check for im-select as fallback
-  local im_select_paths = {
-    vim.fn.expand("~/workspace/bin/im-select.exe"),
-    vim.fn.expand("~/bin/im-select.exe"),
-    "/mnt/c/Windows/System32/im-select.exe",
-  }
-
-  for _, path in ipairs(im_select_paths) do
-    if vim.fn.executable(path) == 1 then
-      return { cmd = path, type = "im-select" }
-    end
-  end
-
-  return nil
-end
-
--- Turn IME off
-local function ime_off()
-  if not ime_cmd then
+-- 前のIDの切り替えが終わってから次を送り、旧版と同じ順序で適用されるようにする
+local function run_im_select(cmd, index)
+  if index > #im_select_ids then
     return
   end
-
-  if ime_cmd.type == "im-select" then
-    -- Try multiple keyboard layout identifiers
-    -- Some environments may use different IDs
-    local ids = {
-      "0x04090409",  -- US keyboard
-      "0x04110411",  -- Japanese keyboard - Alphanumeric mode
-      "1033",        -- English (United States)
-    }
-
-    for _, id in ipairs(ids) do
-      vim.fn.system(string.format("%s %s", ime_cmd.cmd, id))
-    end
-  elseif ime_cmd.type == "zenhan" then
-    -- zenhan: turn IME off
-    vim.fn.system(ime_cmd.cmd .. " 0")
-  end
+  vim.system({ cmd, im_select_ids[index] }, {}, function()
+    run_im_select(cmd, index + 1)
+  end)
 end
 
--- Setup
-function M.setup()
-  ime_cmd = detect_ime_tool()
-
-  if not ime_cmd then
-    vim.notify("IME control tool not found (zenhan or im-select)", vim.log.levels.WARN)
-    return
-  end
-
-  -- Turn IME off when leaving insert mode
+local function setup_autocmds(ime_off)
+  local group = vim.api.nvim_create_augroup("config_ime", { clear = true })
   vim.api.nvim_create_autocmd("InsertLeave", {
-    pattern = "*",
-    callback = function()
-      ime_off()
-    end,
-    desc = "IME off on InsertLeave"
+    group = group,
+    callback = ime_off,
+    desc = "IME off on InsertLeave",
   })
-
-  -- Turn IME off when leaving command/search mode
   vim.api.nvim_create_autocmd("CmdlineLeave", {
-    pattern = "[/?]",
-    callback = function()
-      ime_off()
-    end,
-    desc = "IME off on CmdlineLeave"
+    group = group,
+    -- 旧版の"[/?]"は?に一致せず、素の?は任意の1文字(:も含む)に一致するためエスケープする
+    pattern = { "/", "\\?" },
+    callback = ime_off,
+    desc = "IME off on leaving search",
   })
 end
 
-return M
+-- 見つかったツールのパスに応じて、ノーマルモードに戻ったときの処理を登録する
+local function setup_tool(path)
+  -- Windowsのexeを起動するとWSLでは数十ms掛かり、同期実行だとノーマルモードに戻るたびに固まるため非同期で投げる
+  if vim.fs.basename(path) == "zenhan.exe" then
+    setup_autocmds(function()
+      vim.system({ path, "0" })
+    end)
+    return
+  end
+  setup_autocmds(function()
+    run_im_select(path, 1)
+  end)
+end
+
+-- WSLではPATH探索が/mnt/c配下を走査して1回40ms以上掛かるため、別プロセスで探して起動中のUIを止めない
+MiniDeps.later(function()
+  if vim.fn.has("wsl") == 0 then
+    return
+  end
+
+  -- ||でつなぎ、zenhan.exeが見つかればim-select.exeは探さない
+  local script = "command -v zenhan.exe || command -v im-select.exe"
+  vim.system({ "sh", "-c", script }, { text = true }, function(result)
+    local path = vim.trim(result.stdout or "")
+    if path == "" then
+      return
+    end
+    vim.schedule(function()
+      setup_tool(path)
+    end)
+  end)
+end)
