@@ -135,6 +135,13 @@ make deploy        # リンクの張り直し
 - 個人情報を含む設定は `*.tmpl` にして、生成されるファイルを `.gitignore` に書く
 - git のアカウントを増やすときは `accounts.list` に1行足して `make deploy`。新しいサービスなら `accounts/<service>.conf.tmpl` も作る
 
+### シェルのキー操作
+
+- `cd` (enhancd): 引数なし、または `cd -` / `cd ..` などで fzf による履歴・ディレクトリ選択が開く
+- `Ctrl-h`: ghq のリポジトリを fzf で選んで移動
+- `Ctrl-z`: zellij のセッションを選んでアタッチ (なければ新規起動)
+- `Ctrl-y` (fzf 共通): 選択中の行をコピーして閉じる。enhancd や `Ctrl-h` ではパスがクリップボードに入る (`win32yank.exe` 経由)。`Ctrl-r` の履歴検索などでもその行がコピーされる
+
 ## トラブルシューティング
 
 ### `Failed to start the systemd user session`
