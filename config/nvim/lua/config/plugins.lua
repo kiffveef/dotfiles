@@ -78,6 +78,18 @@ later(function()
         return require("tokyonight.groups").setup(colors, opts)
       end,
     },
+    -- <Leader>lはLSP用なので、loglineは<Leader>nにまとめる
+    mappings = {
+      pick = "<Leader>np",
+      pick_characters = "<Leader>nc",
+      outline = "<Leader>no",
+      stats = "<Leader>ns",
+      outline_buffer = {
+        add_paragraph = "<Leader>na",
+        add_heading = "<Leader>nh",
+        delete = "<Leader>nd",
+      },
+    },
   })
 end)
 

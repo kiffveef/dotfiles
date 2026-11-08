@@ -341,6 +341,7 @@ later(function()
       { mode = "n", keys = "<Leader>f", desc = "+Find" },
       { mode = "n", keys = "<Leader>g", desc = "+Git" },
       { mode = "n", keys = "<Leader>l", desc = "+LSP" },
+      { mode = "n", keys = "<Leader>n", desc = "+Novel" },
       { mode = "n", keys = "<Leader>t", desc = "+Terminal" },
       { mode = "n", keys = "<Leader>u", desc = "+UI" },
       { mode = "n", keys = "<Leader>y", desc = "+Yazi" },
