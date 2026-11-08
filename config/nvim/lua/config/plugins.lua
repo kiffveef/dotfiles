@@ -4,6 +4,17 @@
 
 local add, now, later = MiniDeps.add, MiniDeps.now, MiniDeps.later
 
+-- 自作プラグインはghq配置の開発ディレクトリを優先する(編集が即反映、snapshotの対象外)。無い環境ではmini.depsで取得する
+local ghq_root = vim.fn.expand("~/workspace/github.com")
+local function add_dev(spec)
+  local dev_path = ghq_root .. "/" .. spec.source
+  if vim.fn.isdirectory(dev_path) == 1 then
+    vim.opt.runtimepath:prepend(dev_path)
+  else
+    add(spec)
+  end
+end
+
 -- ========================================
 -- カラースキーム
 -- ========================================
@@ -57,13 +68,7 @@ end)
 -- 対象ウィンドウへの名前空間の付け外しはlogline側(theme.lua)が持つため、ここでは配色だけ渡す
 later(function()
   add({ source = "folke/tokyonight.nvim" })
-  -- 自作プラグインは開発ディレクトリをそのまま使う(編集が即反映、snapshotの対象外)。無い環境ではmini.depsで取得する
-  local logline_dev = vim.fn.expand("~/workspace/github.com/kiffveef/logline")
-  if vim.fn.isdirectory(logline_dev) == 1 then
-    vim.opt.runtimepath:prepend(logline_dev)
-  else
-    add({ source = "kiffveef/logline" })
-  end
+  add_dev({ source = "kiffveef/logline" })
   require("logline").setup({
     theme = {
       groups = function()
