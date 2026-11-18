@@ -67,15 +67,21 @@ end)
 
 -- 対象ウィンドウへの名前空間の付け外しはlogline側(theme.lua)が持つため、ここでは配色だけ渡す
 later(function()
-  add({ source = "folke/tokyonight.nvim" })
+  add({ source = "EdenEast/nightfox.nvim" })
   add_dev({ source = "kiffveef/logline" })
   require("logline").setup({
     theme = {
       groups = function()
-        -- load()やcolorschemeはグローバルを変えるため、色とグループだけ作る
-        local opts = require("tokyonight.config").extend({ style = "day" })
-        local colors = require("tokyonight.colors").setup(opts)
-        return require("tokyonight.groups").setup(colors, opts)
+        -- load()やcolorschemeはグローバルを変えるため、specからグループ定義だけ作る
+        local groups = require("nightfox.group").load("dayfox")
+        local parse_style = require("nightfox.lib.highlight").parse_style
+        -- nightfoxのstyle("bold,italic")はnvim_set_hlの真偽値キーへ展開する
+        for name, hl in pairs(groups) do
+          if not hl.link then
+            groups[name] = vim.tbl_extend("force", parse_style(hl.style), { fg = hl.fg, bg = hl.bg, sp = hl.sp })
+          end
+        end
+        return groups
       end,
     },
     -- <Leader>lはLSP用なので、loglineは<Leader>nにまとめる
