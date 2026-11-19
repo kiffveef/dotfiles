@@ -84,6 +84,15 @@ later(function()
         return groups
       end,
     },
+    -- 既定のリンク先はdayfoxだと名詞が地の色と同じになるため、品詞ごとに色を直接指定する
+    -- 助詞は目立たせないので既定(@comment)のまま
+    highlight = {
+      noun = { fg = "#044CA9" },
+      verb = { fg = "#CD3753" },
+      adjective = { fg = "#AC64CE" },
+      adverb = { fg = "#EC834B" },
+      dialogue = { fg = "#A70257" },
+    },
     -- <Leader>lはLSP用なので、loglineは<Leader>nにまとめる
     mappings = {
       pick = "<Leader>np",
