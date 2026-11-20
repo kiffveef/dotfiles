@@ -338,6 +338,7 @@ later(function()
     clues = {
       -- Leaderグループの説明
       { mode = "n", keys = "<Leader>b", desc = "+Buffer" },
+      { mode = "n", keys = "<Leader>e", desc = "+Erya" },
       { mode = "n", keys = "<Leader>f", desc = "+Find" },
       { mode = "n", keys = "<Leader>g", desc = "+Git" },
       { mode = "n", keys = "<Leader>l", desc = "+LSP" },

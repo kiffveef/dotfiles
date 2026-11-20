@@ -10,6 +10,10 @@ local function add_dev(spec)
   local dev_path = ghq_root .. "/" .. spec.source
   if vim.fn.isdirectory(dev_path) == 1 then
     vim.opt.runtimepath:prepend(dev_path)
+    -- 起動後のruntimepath追加ではplugin/が読まれないため、packaddと同様にここで読み込む
+    for _, file in ipairs(vim.fn.globpath(dev_path, "plugin/**/*.{vim,lua}", false, true)) do
+      vim.cmd.source(file)
+    end
   else
     add(spec)
   end
@@ -105,6 +109,24 @@ later(function()
         delete = "<Leader>nd",
       },
     },
+  })
+end)
+
+-- ========================================
+-- erya(日本語創作向けの語彙辞書とローカルLLM相談)
+-- ========================================
+
+later(function()
+  add_dev({ source = "kiffveef/erya" })
+  -- CLIはPATHに入れていないため、ghq配置のリリースビルドがあればそれを使う。無ければ既定(PATHのerya)に任せる
+  local erya_bin = ghq_root .. "/kiffveef/erya/target/release/erya"
+  if vim.fn.executable(erya_bin) ~= 1 then
+    erya_bin = nil
+  end
+  -- 設定ファイルと辞書はCLI側の探索順(./erya.toml、~/.config/erya/config.tomlなど)に任せる
+  require("erya").setup({
+    bin = erya_bin,
+    keymaps = true,
   })
 end)
 
