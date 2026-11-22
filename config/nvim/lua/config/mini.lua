@@ -151,14 +151,21 @@ later(function()
   map_multistep("i", "<BS>", { "minipairs_bs" })
 end)
 
--- スニペット集は入れず、LSP補完のスニペット候補を展開するためだけに使う
+-- 自作スニペットはsnippets/<lang>.jsonに置き、展開キーではなく補完候補から選ぶ
 later(function()
+  local gen_loader = require("mini.snippets").gen_loader
   require("mini.snippets").setup({
+    snippets = {
+      -- markdown本文ではtree-sitterの言語がmarkdown_inlineになるため、同じファイルを読ませる
+      gen_loader.from_lang({ lang_patterns = { markdown_inline = { "markdown.json" } } }),
+    },
     mappings = {
-      -- 展開するスニペットがなく、既定の<C-j>はinsertモードのカーソル下移動を上書きしてしまうため
+      -- 既定の<C-j>はinsertモードのカーソル下移動を上書きしてしまうため
       expand = "",
     },
   })
+  -- mini.completionの候補にスニペットを出す。絞り込みは補完側に任せる
+  MiniSnippets.start_lsp_server({ match = false })
 
   -- セッション中は<C-l>/<C-h>/<C-c>がジャンプ用に置き換わるため、ノーマルモードに戻ったら残さず終わらせる
   local group = vim.api.nvim_create_augroup("config_snippets", { clear = true })

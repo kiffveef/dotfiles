@@ -1,0 +1,38 @@
+{
+  "logline frontmatter": {
+    "prefix": "fm",
+    "description": "logline.nvimのパラグラフ用フロントマター",
+    "body": [
+      "---",
+      "title: \"$1\"",
+      "purpose: \"$2\"",
+      "synopsis: \"$3\"",
+      "characters: [$4]",
+      "pov: \"$5\"",
+      "location: \"$6\"",
+      "time: \"$7\"",
+      "status: draft",
+      "words: 0",
+      "---",
+      "$0"
+    ]
+  },
+  "mokuterium article frontmatter": {
+    "prefix": "mokuterium",
+    "description": "mokuteriumの記事用フロントマター(idは展開時にUUID v4を生成)",
+    "body": [
+      "---",
+      "id: $UUID",
+      "title: $1",
+      "visibility: ${2|limited,public,passphrase,private|}",
+      "description: $3",
+      "tags:",
+      "  - $4",
+      "labels:",
+      "  - ${5|nudity,sexual,porn,graphic-media|}",
+      "---",
+      "",
+      "$0"
+    ]
+  }
+}
